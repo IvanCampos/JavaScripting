@@ -1,0 +1,27 @@
+<b><a href="https://api.github.com/search/repositories?q=language:javascript">Top JavaScript Projects on Github</a></b>
+<br/>
+Total JavaScript Projects on Github: {{repos.total_count | number}}
+<hr/>
+
+<table border="1">
+    <thead>
+        <th ng-click="doSort('id')">Id</th>
+        <th ng-click="doSort('homepage')">Logo</th>
+        <th ng-click="doSort('owner.login')">Owner</th>
+        <th ng-click="doSort('name')">Name</th>
+        <th ng-click="doSort('watchers')">Watchers</th>
+        <th ng-click="doSort('created_at')">Created At</th>
+        <th ng-click="doSort('updated_at')">Updated At</th>
+        <th ng-click="doSort('description')">Description</th>
+    </thead>
+    <tr ng-repeat="item in repos.items | orderBy:sortBy:reverse">
+        <td>{{item.id}}</td>
+        <td><a href="{{item.homepage}}"><img src="{{item.owner.avatar_url}}" height="50" /></a></td>
+        <td><a href="#/details/{{item.owner.login}}">{{item.owner.login}}</a></td>
+        <td><a href="{{item.html_url}}">{{item.name}}</a></td>
+        <td>{{item.watchers | number}}</td>
+        <td>{{item.created_at | date:'MM/dd/yyyy @ h:mma'}}</td>
+        <td>{{item.updated_at | date:'MM/dd/yyyy @ h:mma'}}</td>
+        <td>{{item.description.substring(0,50)}}...</td>
+    </tr>
+</table>

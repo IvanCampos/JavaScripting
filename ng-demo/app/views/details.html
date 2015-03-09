@@ -1,0 +1,24 @@
+<table border="1">
+    <thead>
+        <th ng-click="doSort('id')">Id</th>
+        <th ng-click="doSort('homepage')">Logo</th>
+        <th ng-click="doSort('owner.login')">Owner</th>
+        <th ng-click="doSort('name')">Name</th>
+        <th ng-click="doSort('watchers')">Watchers</th>
+        <th ng-click="doSort('created_at')">Created At</th>
+        <th ng-click="doSort('updated_at')">Updated At</th>
+        <th ng-click="doSort('description')">Description</th>
+    </thead>
+    <tr ng-repeat="repo in repos | orderBy:sortBy:reverse">
+        <td>{{repo.id}}</td>
+        <td><a href="{{repo.homepage}}"><img src="{{repo.owner.avatar_url}}" height="50" /></a></td>
+        <td><a href="#/details/{{repo.owner.login}}">{{repo.owner.login}}</a></td>
+        <td><a href="{{repo.html_url}}">{{repo.name}}</a></td>
+        <td>{{repo.watchers | number}}</td>
+        <td>{{repo.created_at | date:'MM/dd/yyyy @ h:mma'}} </td>
+        <td>{{repo.updated_at | date:'MM/dd/yyyy @ h:mma'}}</td>
+        <td>{{repo.description.substring(0,50)}}...</td>
+    </tr>
+</table>
+<hr/>
+<a href="#/">Home</a>
