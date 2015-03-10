@@ -2,7 +2,8 @@
 <br/>
 Total JavaScript Projects on Github: {{repos.total_count | number}}
 <hr/>
-
+Filter: <input type="text" ng-model="nameText.owner.login"></input>
+<hr/>
 <table border="1">
     <thead>
         <th ng-click="doSort('id')">Id</th>
@@ -14,7 +15,7 @@ Total JavaScript Projects on Github: {{repos.total_count | number}}
         <th ng-click="doSort('updated_at')">Updated At</th>
         <th ng-click="doSort('description')">Description</th>
     </thead>
-    <tr ng-repeat="item in repos.items | orderBy:sortBy:reverse">
+    <tr ng-repeat="item in repos.items | filter:nameText | orderBy:sortBy:reverse">
         <td>{{item.id}}</td>
         <td><a href="{{item.homepage}}"><img src="{{item.owner.avatar_url}}" height="50" /></a></td>
         <td><a href="#/details/{{item.owner.login}}">{{item.owner.login}}</a></td>

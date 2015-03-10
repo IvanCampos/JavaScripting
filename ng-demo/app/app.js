@@ -2,6 +2,7 @@
     
    var app = angular.module('demoApp',['ngRoute']); //[] is for dependencies
     
+   //Route Provider
    app.config(function ($routeProvider){
        $routeProvider
            .when('/', {
