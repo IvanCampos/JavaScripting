@@ -20,7 +20,7 @@ var dom = document.getElementById("container");
 var myChart = echarts.init(dom);
 var app = {};
 option = null;
-app.title = '北京公交路线 - 线特效';
+app.title = 'Lines';
 
 $.get('data/asset/data/lines-bus.json', function(data) {
     var hStep = 300 / (data.length - 1);
