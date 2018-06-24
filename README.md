@@ -1,4 +1,6 @@
-### JavaScript Libraries Used
-* Baidu ECharts: http://ecomfe.github.io/echarts/index-en.html
+# JavaScripting
 
+## [AngularJS](http://ivancampos.github.io/JavaScripting/ng-demo/#/)
+
+## [Baidu eCharts](http://ivancampos.github.io/JavaScripting/Baidu-ECharts/)
 
