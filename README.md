@@ -1,6 +1,6 @@
 # JavaScripting
 
-## [AngularJS Demo](http://ivancampos.github.io/JavaScripting/ng-demo/#/)
+## [AngularJS](http://ivancampos.github.io/JavaScripting/ng-demo/#/)
 
-## [Baidu eCharts Demos](http://ivancampos.github.io/JavaScripting/Baidu-ECharts/)
+## [Baidu eCharts](http://ivancampos.github.io/JavaScripting/Baidu-ECharts/)
 
