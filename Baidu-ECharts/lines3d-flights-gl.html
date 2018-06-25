@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html style="height: 100%">
+<html>
    <head>
        <meta charset="utf-8">
    </head>
-   <body style="height: 100%; margin: 0">
-       <div id="container" style="height: 100%"></div>
+   <body>
+       <div id="container" style="width: 100%; min-height: 500px"></div>
 	   <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
 	   <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 	   <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
@@ -22,7 +22,7 @@ var app = {};
 option = null;
 var uploadedDataURL = "data-gl/asset/data/flights.json";
 
-app.title = '65k+ 飞机航线';
+app.title = 'Responsive Map Lights';
 
 myChart.showLoading();
 
@@ -44,8 +44,8 @@ $.getJSON(uploadedDataURL, function(data) {
         geo3D: {
             map: 'world',
             shading: 'realistic',
-            silent: true,
-            environment: '#333',
+            silent: false,
+            environment: '#191919',
             realisticMaterial: {
                 roughness: 0.8,
                 metalness: 0
@@ -59,7 +59,8 @@ $.getJSON(uploadedDataURL, function(data) {
             light: {
                 main: {
                     intensity: 1,
-                    alpha: 30
+                    alpha: 30,
+					color: 'gray'
                 },
                 ambient: {
                     intensity: 0
@@ -68,13 +69,12 @@ $.getJSON(uploadedDataURL, function(data) {
             viewControl: {
                 distance: 70,
                 alpha: 89,
-
                 panMouseButton: 'left',
                 rotateMouseButton: 'right'
             },
 
             itemStyle: {
-                areaColor: '#000'
+                areaColor: '#191919'
             },
 
             regionHeight: 0.5
@@ -96,7 +96,8 @@ $.getJSON(uploadedDataURL, function(data) {
 
             lineStyle: {
                 width: 0.2,
-                opacity: 0.05
+                opacity: 0.05,
+				color: '#18CAE6'
             },
 
             data: routes
@@ -109,10 +110,15 @@ $.getJSON(uploadedDataURL, function(data) {
             seriesIndex: 0
         });
     });
-});;
+});
 if (option && typeof option === "object") {
     myChart.setOption(option, true);
 }
+$(window).on('resize', function(){
+    if(myChart != null && myChart != undefined){
+        myChart.resize();
+    }
+});
        </script>
    </body>
 </html>
