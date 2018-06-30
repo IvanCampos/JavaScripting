@@ -3,21 +3,24 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Baidu eChart Demos</title>
+	<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 </head>
 <body>
 <h2>eChart Demos</h2>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/bar3d-music-visualization.html">Music Viz</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/eCharts.html">Tron Style</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/effectScatter-bmap.html">Scatter EpiCenter</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/globe-layers.html">Globe</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines3d-flights.html">Flights Round 3D</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines3d-flights-gl.html">Flights Flat 3D</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines-bmap-effect.html">Map Night Lines</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/pie-nest.html">Nested Pie Charts</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/scatter-nutrients-matrix.html">Scatter Quadrants</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/transparent-bar3d.html">Transparent Bars 3D</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/Arc.html">Arc</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/map-epicenter.html">map epicenter</a></div>
-	<div><a href="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/thinkGIS.html">think GIS</a></div>
+<div id="gallery"></div>
+<script>
+	var BASE_URL = "http://ivancampos.github.io/JavaScripting/Baidu-ECharts/";
+    $.get("https://api.github.com/repos/ivancampos/JavaScripting/contents/Baidu-ECharts", function (data) {
+        for (var i=0; i < data.length; i++) {
+            if ((data[i].name.endsWith(".html")) && (!data[i].name.startsWith("index")) && (!data[i].name.startsWith("Base"))) {
+                var fileName = data[i].name;
+                $("#gallery").append("<a href='" + BASE_URL + fileName + "'>" + fileName + "</a><br/>");
+            }
+		}
+    })
+	.fail(function () {
+        $("#gallery").append("Github API is currently experiencing issues. Please try again later.");
+	});
+</script>
 </body>
 </html>
