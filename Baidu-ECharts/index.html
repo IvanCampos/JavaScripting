@@ -9,18 +9,17 @@
 <h2>eChart Demos</h2>
 <div id="gallery"></div>
 <script>
-	var BASE_URL = "http://ivancampos.github.io/JavaScripting/Baidu-ECharts/";
+    var BASE_URL = "http://ivancampos.github.io/JavaScripting/Baidu-ECharts/";
     $.get("https://api.github.com/repos/ivancampos/JavaScripting/contents/Baidu-ECharts", function (data) {
-        for (var i=0; i < data.length; i++) {
+        for (var i = 0; i < data.length; i++) {
             if ((data[i].name.endsWith(".html")) && (!data[i].name.startsWith("index")) && (!data[i].name.startsWith("Base"))) {
                 var fileName = data[i].name;
                 $("#gallery").append("<a href='" + BASE_URL + fileName + "'>" + fileName + "</a><br/>");
             }
-		}
-    })
-	.fail(function () {
+        }
+    }).fail(function () {
         $("#gallery").append("Github API is currently experiencing issues. Please try again later.");
-	});
+    });
 </script>
 </body>
 </html>
