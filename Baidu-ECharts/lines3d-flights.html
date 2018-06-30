@@ -166,6 +166,11 @@ $.getJSON('./data-gl/asset/data/flights.json', function (data) {
 if (option && typeof option === "object") {
     myChart.setOption(option, true);
 }
+$(window).on('resize', function(){
+    if(myChart != null && myChart != undefined){
+        myChart.resize();
+    }
+});
        </script>
    </body>
 </html>

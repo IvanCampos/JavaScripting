@@ -23,8 +23,13 @@
   <!-- add demo -->
 ;
 if (option && typeof option === "object") {
-myChart.setOption(option, true);
+	myChart.setOption(option, true);
 }
+$(window).on('resize', function(){
+	if(myChart != null && myChart != undefined){
+		myChart.resize();
+	}
+});
 </script>
 </body>
 </html>

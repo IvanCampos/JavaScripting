@@ -581,5 +581,12 @@
                 myChart.setOption(option); 
             }
         );
+
+
+        $(window).on('resize', function(){
+            if(myChart != null && myChart != undefined){
+                myChart.resize();
+            }
+        });
     </script>
 </body>
