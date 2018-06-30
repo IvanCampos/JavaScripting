@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+  <!-- add demo -->
+    myChart.showLoading();
+
+
+    var data2 = {
+        "name": "省核心交换机",
+        "children": [{
+            name: 'XX市核心',
+            "children": [
+
+                {
+                    "name": "BRAS001",
+                    "children": [{
+                        "name": "下联口001",
+                        itemStyle: {
+                            normal: {
+                                color: {
+                                    image: 'image://http://img.ph.126.net/wIjj_obvlVrnFJuHG5eAvA==/1509550300099644221.jpg', // 支持为 HTMLImageElement, HTMLCanvasElement，不支持路径字符串
+                                    repeat: 'no-repeat' // 是否平铺, 可以是 'repeat-x', 'repeat-y', 'no-repeat'
+                                },
+                                borderColor: '#000',
+                                borderWidth: 1,
+                                borderType: 'solid',
+                            }
+                        },
+                        "children": [{
+                            "name": "OLT上联口837",
+
+                            "children": [{
+                                "name": "OLT001",
+                                "children": [{
+                                    "name": "PON口001",
+
+                                    "children": [{
+                                        "name": "ONU001",
+                                        "value": 2105,
+                                        children:[{name:'stb7376464764847'}]
+                                    }, {
+                                        "name": "ONU002",
+                                        "value": 1316,
+                                        children:[{name:'stb7376464764847'}]
+                                    }, {
+                                        "name": "ONU003",
+                                        "value": 3151,
+                                        children:[{name:'stb7376464764847'}]
+                                    }]
+                                },{
+                                    "name": "PON口002",
+
+                                    "children": [{
+                                        "name": "ONU001",
+                                        "value": 2105,
+                                        children:[{name:'stb7376464764847'}]
+                                    }, {
+                                        "name": "ONU002",
+                                        "value": 1316,
+                                        children:[{name:'stb7376464764847'}]
+                                    }, {
+                                        "name": "ONU003",
+                                        "value": 3151,
+                                        children:[{name:'stb7376464764847'}]
+                                    }]
+                                }],
+                            }]
+                        },
+
+
+                        ]
+                    }]
+                }
+            ]
+        }, {
+            "name": "省中心CDN"
+        }, ]
+    };
+
+    myChart.hideLoading();
+
+    myChart.setOption(option = {
+        tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove'
+        },
+        legend: {
+            top: '2%',
+            left: '3%',
+            orient: 'vertical',
+            data: [{
+                name: 'tree1',
+                icon: 'rectangle'
+            }, {
+                name: 'tree2',
+                icon: 'rectangle'
+            }],
+            borderColor: '#c23531'
+        },
+        series: [
+
+            {
+                type: 'tree',
+                name: 'tree2',
+                data: [data2],
+
+                top: '20%',
+                //left: '5%',
+                bottom: '22%',
+                right: '18%',
+
+                symbolSize: 20,
+                initialTreeDepth: 10,
+                label: {
+                    normal: {
+                        position: 'bottom',
+                        //verticalAlign: 'middle',
+                        align: 'center'
+                    }
+                },
+
+                /* leaves: {
+					 label: {
+						 normal: {
+							 position: 'right',
+							 verticalAlign: 'middle',
+							 align: 'left'
+						 }
+					 }
+				 },*/
+
+                expandAndCollapse: true,
+
+                animationDuration: 550,
+                animationDurationUpdate: 750
+            }
+        ]
+    });
+;
+if (option && typeof option === "object") {
+myChart.setOption(option, true);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+
+    var subtext='基于18年6月3日对gallery的爬虫结果'
+    var data = [{
+        "time": '收到赞最多的十位作者',
+        "data": [{
+            name: 'echarts',
+            value: 1889
+        },
+            {
+                name: 'pissang',
+                value: 1251
+            },
+            {
+                name: '虚天神顶',
+                value: 567
+            },
+            {
+                name: '王叮叮当当响',
+                value: 527
+            },
+            {
+                name: 'ovilia1024',
+                value: 335
+            },
+            {
+                name: 'sushuang0322',
+                value: 282
+            },
+            {
+                name: 'JackBluer',
+                value: 270
+            },
+            {
+                name: 'null主人',
+                value: 196
+            },
+            {
+                name: 'ni1o1',
+                value: 192
+            },
+            {
+                name: '小白高被注册了',
+                value: 158
+            }
+        ]
+    }, {
+        "time": '阅读量最多的十位作者',
+        "data": [{
+            name: 'pissang',
+            value: 1185886
+        },
+            {
+                name: 'echarts',
+                value: 1060447
+            },
+            {
+                name: '虚天神顶',
+                value: 209769
+            },
+            {
+                name: '王叮叮当当响',
+                value: 180950
+            },
+            {
+                name: 'ovilia1024',
+                value: 126134
+            },
+            {
+                name: 'sushuang0322',
+                value: 111275
+            },
+            {
+                name: 'JackBluer',
+                value: 103530
+            },
+            {
+                name: 'null主人',
+                value: 102876
+            },
+            {
+                name: 'ni1o1',
+                value: 70480
+            },
+            {
+                name: 'Lost_none',
+                value: 62109
+            }
+        ]
+    }, {
+        "time": '收到评论最多的十位作者',
+        "data": [{
+            name: 'pissang',
+            value: 294
+        },
+            {
+                name: 'echarts',
+                value: 165
+            },
+            {
+                name: 'null主人',
+                value: 159
+            },
+            {
+                name: '虚天神顶',
+                value: 145
+            },
+            {
+                name: '王叮叮当当响',
+                value: 82
+            },
+            {
+                name: 'ovilia1024',
+                value: 69
+            },
+            {
+                name: 'ni1o1',
+                value: 68
+            },
+            {
+                name: 'JackBluer',
+                value: 64
+            },
+            {
+                name: '阳光的Only丶',
+                value: 60
+            },
+            {
+                name: '小白高被注册了',
+                value: 58
+            }
+        ]
+    }, {
+        "time": '收到赞最多的十幅作品',
+        "data": [{
+            name: 'Voxelize image( pissang )',
+            value: 170
+        },
+            {
+                name: '本年商场顾客男女人数统计( 王叮叮当当响 )',
+                value: 129
+            },
+            {
+                name: '虚线和渐变的模拟( echarts )',
+                value: 119
+            },
+            {
+                name: 'ECharts-GL Hello World( pissang )',
+                value: 96
+            },
+            {
+                name: '基于地图下钻( null主人 )',
+                value: 90
+            },
+            {
+                name: '朴姓人口迁徙图( miaolz123 )',
+                value: 88
+            },
+            {
+                name: '全国主要城市空气质量( echarts )',
+                value: 86
+            },
+            {
+                name: 'Transparent Bar3D( pissang )',
+                value: 86
+            },
+            {
+                name: 'Music Visualization( pissang )',
+                value: 85
+            },
+            {
+                name: 'echarts扩展百度地图迁徙( 阳光的Only丶 )',
+                value: 83
+            }
+        ]
+    },
+        {
+            "time": '阅读量最多的十幅作品',
+            "data": [{
+                name: 'ECharts-GL Hello World( pissang )',
+                value: 119746
+            },
+                {
+                    name: 'Voxelize image( pissang )',
+                    value: 119597
+                },
+                {
+                    name: 'Taxi routes of Cape Town( pissang )',
+                    value: 84938
+                },
+                {
+                    name: '虚线和渐变的模拟( echarts )',
+                    value: 70999
+                },
+                {
+                    name: 'Flights( pissang )',
+                    value: 66861
+                },
+                {
+                    name: '本年商场顾客男女人数统计( 王叮叮当当响 )',
+                    value: 63775
+                },
+                {
+                    name: '基本水球图( echarts )',
+                    value: 60699
+                },
+                {
+                    name: 'Music Visualization( pissang )',
+                    value: 59483
+                },
+                {
+                    name: 'Transparent Bar3D( pissang )',
+                    value: 56786
+                },
+                {
+                    name: '全国主要城市空气质量( echarts )',
+                    value: 53216
+                },
+            ]
+        }, {
+            "time": '收到评论最多的十幅作品',
+            "data": [{
+                name: 'ECharts-GL Hello World( pissang )',
+                value: 56
+            },
+                {
+                    name: 'echarts扩展百度地图迁徙( 阳光的Only丶 )',
+                    value: 55
+                },
+                {
+                    name: '基于地图下钻( null主人 )',
+                    value: 48
+                },
+                {
+                    name: '双向bar图( 4G哦路么了 )',
+                    value: 43
+                },
+                {
+                    name: '测试bar3D、scatter3D、geo3D( 电竞1的魅力 )',
+                    value: 42
+                },
+                {
+                    name: '公交线路客流可视化( ni1o1 )',
+                    value: 35
+                },
+                {
+                    name: 'Echarts3官方词云图( 虚天神顶 )',
+                    value: 35
+                },
+                {
+                    name: '长春市公交线路网( Unclechao )',
+                    value: 33
+                },
+                {
+                    name: 'Transparent Bar3D( pissang )',
+                    value: 33
+                },
+            ]
+        }
+    ]
+
+
+    var option = {
+        //  backgroundColor: '#25499F',
+        baseOption: {
+            animationDurationUpdate: 1000,
+            animationEasingUpdate: 'quinticInOut',
+            timeline: {
+                axisType: 'category',
+                orient: 'vertical',
+                autoPlay: true,
+                //  inverse: true,
+                playInterval: 5000,
+                left: null,
+                right: 30,
+                top: 330,
+                bottom: 100,
+                //  width: 46,
+                height: null,
+                label: {
+                    normal: {
+                        show: true,
+                        interval: 0,
+                        //  textStyle: {
+                        //  color: '#ddd'
+                        //  }
+                    },
+                    //  emphasis: {
+                    //      textStyle: {
+                    //          color: '#fff'
+                    //      }
+                    //  }
+                },
+                symbol: 'none',
+                lineStyle: {
+                    color: '#ccc',
+                    show: false
+                },
+                checkpointStyle: {
+                    symbol:'none',
+                    color: '#bbb',
+                    borderColor: '#777',
+                    show: false,
+                    borderWidth: 1
+                },
+                controlStyle: {
+                    showNextBtn: false,
+                    showPrevBtn: false,
+                    normal: {
+                        color: '#666',
+                        show: false,
+                        borderColor: '#666'
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa'
+                    }
+                },
+                data: data.map(function(ele) {
+                    return ele.time
+                })
+            },
+            //  backgroundColor: '#25499F',
+            title: [{
+                //  text: '基于18年5月4日对gallery的爬虫结果',
+                //  subtext: 'GDP单位:亿元',
+                left: 'center',
+                top: 'top',
+                textStyle: {
+                    fontSize: 25,
+                    //  color: 'rgba(255,255,255, 0.9)'
+                }
+            }, {
+                subtext: subtext,
+                left: 'center',
+                top: '5%'
+            }],
+            //  tooltip: {
+            //      formatter: function(params) {
+            //          if ('value' in params.data) {
+            //              return params.data.value[2] + ': ' + params.data.value[0];
+            //          }
+            //      }
+            //  },
+            grid: {
+                left: 10,
+                right: '20%',
+                top: '12%',
+                bottom: 5
+            },
+            xAxis: {},
+            yAxis: {},
+            series: [
+
+                {
+                    id: 'bar',
+                    type: 'bar',
+                    tooltip: {
+                        show: false
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            textStyle: {
+                                //  color: '#ddd'
+                            }
+                        }
+                    },
+                    data: []
+                },
+
+            ]
+        },
+        options: []
+    }
+
+    for (var i = 0; i < data.length; i++) {
+
+        option.options.push({
+            title: {
+                text: data[i].time
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.1],
+                axisLabel: {
+                    show: false,
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'category',
+                axisLabel: {
+                    show: false,
+                    textStyle: {
+                        //  color: '#ddd'
+                    }
+                },
+
+                data: data[i].data.map(function(ele) {
+                    return ele.name
+                }).reverse()
+            },
+            series: [
+
+                {
+                    id: 'bar',
+                    label: {
+                        normal: {
+                            position: 'right',
+                            formatter: '{b} : {c}'
+                        }
+                    },
+                    data: data[i].data.map(function(ele) {
+                        return ele.value
+                    }).sort(function(a, b) {
+                        return a > b
+                    })
+                },
+
+            ]
+        })
+    }
+
+;
+if (option && typeof option === "object") {
+myChart.setOption(option, true);
+}
+</script>
+</body>
+</html>
