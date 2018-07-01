@@ -49,6 +49,48 @@
                 color: '#000'
             }
         },
+        toolbox:{
+            right:30,
+            feature:{
+                dataZoom: {
+                    show : false,
+                    title : {
+                        dataZoom : 'Zoom',
+                        dataZoomReset : 'Zoom Reset'
+                    }
+				},
+                dataView : {
+                    show : true,
+                    title : 'Raw Data',
+                    readOnly: false,
+                    lang: ['Data View', 'Close', 'Refresh']
+                },
+                saveAsImage: {
+                        show : true,
+                        title : 'Save as PNG',
+                        type : 'png',
+                        lang : ['English']
+				},
+                restore: {
+                    show : false,
+                    title : 'Restore'
+				},
+                magicType: {
+                    type:['line','bar','stack','tiled','force','chord','pie','funnel'],
+                    show : false,
+                    title : {
+                        line : 'line',
+                        bar : 'bar',
+                        stack : 'stack',
+                        tiled : 'tiled',
+                        force: 'force',
+                        chord: 'chord',
+                        pie: 'pie',
+                        funnel: 'funnel'
+                    }
+                }
+            }
+        },
         calendar: {
             top: 40,
             left: 'center',
