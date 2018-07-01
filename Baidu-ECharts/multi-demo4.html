@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+	   <style>
+		   * {
+			   box-sizing: border-box;
+		   }
+		   .column25 {
+			   float: left;
+			   width: 25%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .column33 {
+			   float: left;
+			   width: 33%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .column50 {
+			   float: left;
+			   width: 50%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .row:after {
+			   content: "";
+			   display: table;
+			   clear: both;
+		   }
+		   .iframe {
+			   border: 0;
+			   height:100%;
+			   width:100%;
+		   }
+	   </style>
+   </head>
+   <body style="background-color: black;">
+   <div class="row">
+       <div id="container" class="column33"></div>
+	   <div id="container2" class="column33"></div>
+	   <div id="container3" class="column33"></div>
+   </div>
+   <div class="row">
+	   <div id="container4" class="column33"></div>
+	   <div id="container5" class="column33"></div>
+	   <div id="container6" class="column33">
+		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/godzilla.html"></iframe>
+	   </div>
+   </div>
+       <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+	   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+	   <script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+	   <script type="text/javascript" src="dist/vendors/simplex.js"></script>
+	   <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    backgroundColor: '#000',
+    globe: {
+        baseTexture: 'data-gl/asset/earth.jpg',
+        heightTexture: 'data-gl/asset/bathymetry_bw_composite_4k.jpg',
+
+        displacementScale: 0.1,
+
+        shading: 'lambert',
+
+        environment: 'data-gl/asset/starfield.jpg',
+
+        light: {
+            ambient: {
+                intensity: 0.1
+            },
+            main: {
+                intensity: 1.5
+            }
+        },
+
+        layers: [{
+            type: 'blend',
+            blendTo: 'emission',
+            texture: 'data-gl/asset/night.jpg'
+        }, {
+            type: 'overlay',
+            texture: 'data-gl/asset/clouds.png',
+            shading: 'lambert',
+            distance: 5
+        }]
+    },
+    series: [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '50%'],
+            data:[
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:274, name:'联盟广告'},
+                {value:235, name:'视频广告'},
+                {value:400, name:'搜索引擎'}
+            ].sort(function (a, b) { return a.value - b.value; }),
+            roseType: 'radius',
+            label: {
+                normal: {
+                    textStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    },
+                    smooth: 0.2,
+                    length: 10,
+                    length2: 20
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#c23531',
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+        }
+	]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+$(window).on('resize', function(){
+    if(myChart != null && myChart != undefined){
+        myChart.resize();
+    }
+});
+
+
+var dom2 = document.getElementById("container2");
+var myChart2 = echarts.init(dom2);
+var app2 = {};
+var option2 = null;
+var uploadedDataURL2 = "data-gl/asset/data/flights.json";
+
+myChart2.showLoading();
+
+$.getJSON(uploadedDataURL2, function(data) {
+
+    myChart2.hideLoading();
+
+    function getAirportCoord(idx) {
+        return [data.airports[idx][3], data.airports[idx][4]];
+    }
+    var routes = data.routes.map(function (airline) {
+        return [
+            getAirportCoord(airline[1]),
+            getAirportCoord(airline[2])
+        ];
+    });
+
+    myChart2.setOption({
+        geo3D: {
+            map: 'world',
+            shading: 'realistic',
+            silent: false,
+            environment: 'black',
+            realisticMaterial: {
+                roughness: 0.8,
+                metalness: 0
+            },
+            postEffect: {
+                enable: true
+            },
+            groundPlane: {
+                show: false
+            },
+            light: {
+                main: {
+                    intensity: 1,
+                    alpha: 30,
+                    color: 'gray'
+                },
+                ambient: {
+                    intensity: 0
+                }
+            },
+            viewControl: {
+                distance: 70,
+                alpha: 89,
+                panMouseButton: 'left',
+                rotateMouseButton: 'right'
+            },
+
+            itemStyle: {
+                areaColor: '#191919'
+            },
+
+            regionHeight: 0.5
+        },
+        series: [{
+            type: 'lines3D',
+
+            coordinateSystem: 'geo3D',
+
+            effect: {
+                show: true,
+                trailWidth: 1,
+                trailOpacity: 0.5,
+                trailLength: 0.2,
+                constantSpeed: 5
+            },
+
+            blendMode: 'lighter',
+
+            lineStyle: {
+                width: 0.2,
+                opacity: 0.05,
+                color: '#18CAE6'
+            },
+
+            data: routes
+        }]
+    });
+
+    window.addEventListener('keydown', function () {
+        myChart2.dispatchAction({
+            type: 'lines3DToggleEffect',
+            seriesIndex: 0
+        });
+    });
+});
+if (option2 && typeof option2 === "object") {
+    myChart2.setOption(option2, true);
+}
+$(window).on('resize', function(){
+    if(myChart2 != null && myChart2 != undefined){
+        myChart2.resize();
+    }
+});
+
+
+
+var dom3 = document.getElementById("container3");
+var myChart3 = echarts.init(dom3);
+var app3 = {};
+var option3 = null;
+
+var data3 = [{
+    name: '海门',
+    value: 9
+}, {
+    name: '鄂尔多斯',
+    value: 12
+}, {
+    name: '招远',
+    value: 12
+}, {
+    name: '舟山',
+    value: 12
+}, {
+    name: '齐齐哈尔',
+    value: 14
+}, {
+    name: '拉萨',
+    value: 214
+}, {
+    name: '云浮',
+    value: 24
+}, {
+    name: '梅州',
+    value: 25
+}, {
+    name: '文登',
+    value: 25
+}, {
+    name: '上海',
+    value: 105
+}, {
+    name: '攀枝花',
+    value: 25
+}, {
+    name: '威海',
+    value: 25
+}, {
+    name: '承德',
+    value: 25
+}, {
+    name: '厦门',
+    value: 26
+}, {
+    name: '汕尾',
+    value: 26
+}, {
+    name: '潮州',
+    value: 26
+}, {
+    name: '丹东',
+    value: 27
+}, {
+    name: '太仓',
+    value: 27
+}, {
+    name: '曲靖',
+    value: 27
+}, {
+    name: '烟台',
+    value: 0
+}, {
+    name: '福州',
+    value: 29
+}, {
+    name: '瓦房店',
+    value: 30
+}, {
+    name: '即墨',
+    value: 30
+}, {
+    name: '抚顺',
+    value: 31
+}, {
+    name: '玉溪',
+    value: 31
+}, {
+    name: '张家口',
+    value: 31
+}, {
+    name: '阳泉',
+    value: 31
+}, {
+    name: '莱州',
+    value: 0
+}, {
+    name: '湖州',
+    value: 32
+}, {
+    name: '汕头',
+    value: 32
+}, {
+    name: '昆山',
+    value: 33
+}, {
+    name: '宁波',
+    value: 13
+}, {
+    name: '湛江',
+    value: 33
+}, {
+    name: '揭阳',
+    value: 34
+}, {
+    name: '荣成',
+    value: 34
+}, {
+    name: '连云港',
+    value: 35
+}, {
+    name: '葫芦岛',
+    value: 35
+}, {
+    name: '常熟',
+    value: 36
+}, {
+    name: '东莞',
+    value: 36
+}, {
+    name: '河源',
+    value: 36
+}, {
+    name: '淮安',
+    value: 36
+}, {
+    name: '泰州',
+    value: 36
+}, {
+    name: '南宁',
+    value: 37
+}, {
+    name: '营口',
+    value: 37
+}, {
+    name: '惠州',
+    value: 37
+}, {
+    name: '江阴',
+    value: 37
+}, {
+    name: '蓬莱',
+    value: 90
+}, {
+    name: '韶关',
+    value: 38
+}, {
+    name: '嘉峪关',
+    value: 308
+}, {
+    name: '广州',
+    value: 218
+}, {
+    name: '延安',
+    value: 38
+}, {
+    name: '太原',
+    value: 39
+}, {
+    name: '清远',
+    value: 39
+}, {
+    name: '中山',
+    value: 39
+}, {
+    name: '昆明',
+    value: 39
+}, {
+    name: '寿光',
+    value: 40
+}, {
+    name: '盘锦',
+    value: 0
+}, {
+    name: '大连',
+    value: 207
+}, {
+    name: '临汾',
+    value: 47
+}, {
+    name: '吴江',
+    value: 47
+}, {
+    name: '石嘴山',
+    value: 49
+}, {
+    name: '沈阳',
+    value: 19
+}, {
+    name: '苏州',
+    value: 50
+}, {
+    name: '茂名',
+    value: 50
+}, {
+    name: '嘉兴',
+    value: 51
+}, {
+    name: '长春',
+    value: 51
+}, {
+    name: '胶州',
+    value: 52
+}, {
+    name: '银川',
+    value: 52
+}, {
+    name: '张家港',
+    value: 352
+}, {
+    name: '三门峡',
+    value: 53
+}, {
+    name: '锦州',
+    value: 54
+}, {
+    name: '南昌',
+    value: 54
+}, {
+    name: '柳州',
+    value: 124
+}, {
+    name: '三亚',
+    value: 124
+}, {
+    name: '自贡',
+    value: 56
+}, {
+    name: '吉林',
+    value: 56
+}, {
+    name: '阳江',
+    value: 57
+}, {
+    name: '泸州',
+    value: 57
+}, {
+    name: '西宁',
+    value: 57
+}, {
+    name: '宜宾',
+    value: 58
+}, {
+    name: '呼和浩特',
+    value: 90
+}, {
+    name: '成都',
+    value: 168
+}, {
+    name: '大同',
+    value: 90
+}, {
+    name: '镇江',
+    value: 59
+}, {
+    name: '桂林',
+    value: 59
+}, {
+    name: '张家界',
+    value: 59
+}, {
+    name: '宜兴',
+    value: 59
+}, {
+    name: '北海',
+    value: 60
+}, {
+    name: '西安',
+    value: 101
+}, {
+    name: '金坛',
+    value: 62
+}, {
+    name: '东营',
+    value: 62
+}, {
+    name: '牡丹江',
+    value: 63
+}, {
+    name: '遵义',
+    value: 63
+}, {
+    name: '绍兴',
+    value: 63
+}, {
+    name: '扬州',
+    value: 64
+}, {
+    name: '常州',
+    value: 64
+}, {
+    name: '潍坊',
+    value: 65
+}, {
+    name: '重庆',
+    value: 66
+}, {
+    name: '台州',
+    value: 67
+}, {
+    name: '南京',
+    value: 67
+}, {
+    name: '滨州',
+    value: 70
+}, {
+    name: '贵阳',
+    value: 71
+}, {
+    name: '无锡',
+    value: 51
+}, {
+    name: '本溪',
+    value: 71
+}, {
+    name: '克拉玛依',
+    value: 110
+}, {
+    name: '渭南',
+    value: 72
+}, {
+    name: '马鞍山',
+    value: 102
+}, {
+    name: '宝鸡',
+    value: 72
+}, {
+    name: '焦作',
+    value: 75
+}, {
+    name: '句容',
+    value: 75
+}, {
+    name: '北京',
+    value: 79
+}, {
+    name: '鞍山',
+    value: 86
+}, {
+    name: '溧阳',
+    value: 86
+}, {
+    name: '库尔勒',
+    value: 60
+}, {
+    name: '荆州',
+    value: 127
+}, {
+    name: '宜昌',
+    value: 130
+}, {
+    name: '义乌',
+    value: 132
+}, {
+    name: '丽水',
+    value: 133
+}, {
+    name: '洛阳',
+    value: 134
+}, {
+    name: '秦皇岛',
+    value: 0
+}, {
+    name: '株洲',
+    value: 143
+}, {
+    name: '石家庄',
+    value: 147
+}, {
+    name: '莱芜',
+    value: 0
+}, {
+    name: '常德',
+    value: 152
+}, {
+    name: '保定',
+    value: 53
+}, {
+    name: '湘潭',
+    value: 154
+}, {
+    name: '金华',
+    value: 157
+}, {
+    name: '岳阳',
+    value: 169
+}, {
+    name: '长沙',
+    value: 75
+}, {
+    name: '衢州',
+    value: 177
+}, {
+    name: '廊坊',
+    value: 220
+}, {
+    name: '菏泽',
+    value: 0
+}, {
+    name: '合肥',
+    value: 229
+}, {
+    name: '武汉',
+    value: 273
+}, {
+    name: '大庆',
+    value: 279
+}];
+var geoCoordMap = {
+    '海门': [121.15, 31.89],
+    '鄂尔多斯': [109.781327, 39.608266],
+    '招远': [120.38, 37.35],
+    '舟山': [122.207216, 29.985295],
+    '齐齐哈尔': [123.97, 47.33],
+    '拉萨': [91.11, 29.97],
+    '云浮': [112.02, 22.93],
+    '梅州': [116.1, 24.55],
+    '文登': [122.05, 37.2],
+    '上海': [121.48, 31.22],
+    '攀枝花': [101.718637, 26.582347],
+    '威海': [122.1, 37.5],
+    '承德': [117.93, 40.97],
+    '厦门': [118.1, 24.46],
+    '汕尾': [115.375279, 22.786211],
+    '潮州': [116.63, 23.68],
+    '丹东': [124.37, 40.13],
+    '太仓': [121.1, 31.45],
+    '曲靖': [103.79, 25.51],
+    '烟台': [121.39, 37.52],
+    '福州': [119.3, 26.08],
+    '瓦房店': [121.979603, 39.627114],
+    '即墨': [120.45, 36.38],
+    '抚顺': [123.97, 41.97],
+    '玉溪': [102.52, 24.35],
+    '张家口': [114.87, 40.82],
+    '阳泉': [113.57, 37.85],
+    '莱州': [119.942327, 37.177017],
+    '湖州': [120.1, 30.86],
+    '汕头': [116.69, 23.39],
+    '昆山': [120.95, 31.39],
+    '宁波': [121.56, 29.86],
+    '湛江': [110.359377, 21.270708],
+    '揭阳': [116.35, 23.55],
+    '荣成': [122.41, 37.16],
+    '连云港': [119.16, 34.59],
+    '葫芦岛': [120.836932, 40.711052],
+    '常熟': [120.74, 31.64],
+    '东莞': [113.75, 23.04],
+    '河源': [114.68, 23.73],
+    '淮安': [119.15, 33.5],
+    '泰州': [119.9, 32.49],
+    '南宁': [108.33, 22.84],
+    '营口': [122.18, 40.65],
+    '惠州': [114.4, 23.09],
+    '江阴': [120.26, 31.91],
+    '蓬莱': [120.75, 37.8],
+    '韶关': [113.62, 24.84],
+    '嘉峪关': [98.289152, 39.77313],
+    '广州': [113.23, 23.16],
+    '延安': [109.47, 36.6],
+    '太原': [112.53, 37.87],
+    '清远': [113.01, 23.7],
+    '中山': [113.38, 22.52],
+    '昆明': [102.73, 25.04],
+    '寿光': [118.73, 36.86],
+    '盘锦': [122.070714, 41.119997],
+    '大连': [121.62, 38.92],
+    '临汾': [111.5, 36.08],
+    '吴江': [120.63, 31.16],
+    '石嘴山': [106.39, 39.04],
+    '沈阳': [123.38, 41.8],
+    '苏州': [120.62, 31.32],
+    '茂名': [110.88, 21.68],
+    '嘉兴': [120.76, 30.77],
+    '长春': [125.35, 43.88],
+    '胶州': [120.03336, 36.264622],
+    '银川': [106.27, 38.47],
+    '张家港': [120.555821, 31.875428],
+    '三门峡': [111.19, 34.76],
+    '锦州': [121.15, 41.13],
+    '南昌': [115.89, 28.68],
+    '柳州': [109.4, 24.33],
+    '三亚': [109.511909, 18.252847],
+    '自贡': [104.778442, 29.33903],
+    '吉林': [126.57, 43.87],
+    '阳江': [111.95, 21.85],
+    '泸州': [105.39, 28.91],
+    '西宁': [101.74, 36.56],
+    '宜宾': [104.56, 29.77],
+    '呼和浩特': [111.65, 40.82],
+    '成都': [104.06, 30.67],
+    '大同': [113.3, 40.12],
+    '镇江': [119.44, 32.2],
+    '桂林': [110.28, 25.29],
+    '张家界': [110.479191, 29.117096],
+    '宜兴': [119.82, 31.36],
+    '北海': [109.12, 21.49],
+    '西安': [108.95, 34.27],
+    '金坛': [119.56, 31.74],
+    '东营': [118.49, 37.46],
+    '牡丹江': [129.58, 44.6],
+    '遵义': [106.9, 27.7],
+    '绍兴': [120.58, 30.01],
+    '扬州': [119.42, 32.39],
+    '常州': [119.95, 31.79],
+    '潍坊': [119.1, 36.62],
+    '重庆': [106.54, 29.59],
+    '台州': [121.420757, 28.656386],
+    '南京': [118.78, 32.04],
+    '滨州': [118.03, 37.36],
+    '贵阳': [106.71, 26.57],
+    '无锡': [120.29, 31.59],
+    '本溪': [123.73, 41.3],
+    '克拉玛依': [84.77, 45.59],
+    '渭南': [109.5, 34.52],
+    '马鞍山': [118.48, 31.56],
+    '宝鸡': [107.15, 34.38],
+    '焦作': [113.21, 35.24],
+    '句容': [119.16, 31.95],
+    '北京': [116.46, 39.92],
+    '鞍山': [122.85, 41.12],
+    '溧阳': [119.48, 31.43],
+    '库尔勒': [86.06, 41.68],
+    '荆州': [112.239741, 30.335165],
+    '宜昌': [111.3, 30.7],
+    '义乌': [120.06, 29.32],
+    '丽水': [119.92, 28.45],
+    '洛阳': [112.44, 34.7],
+    '秦皇岛': [119.57, 39.95],
+    '株洲': [113.16, 27.83],
+    '石家庄': [114.48, 38.03],
+    '莱芜': [117.67, 36.19],
+    '常德': [111.69, 29.05],
+    '保定': [115.48, 38.85],
+    '湘潭': [112.91, 27.87],
+    '金华': [119.64, 29.12],
+    '岳阳': [113.09, 29.37],
+    '长沙': [113, 28.21],
+    '衢州': [118.88, 28.97],
+    '廊坊': [116.7, 39.53],
+    '菏泽': [115.480656, 35.23375],
+    '合肥': [117.27, 31.86],
+    '武汉': [114.31, 30.52],
+    '大庆': [125.03, 46.58]
+};
+
+var convertData = function(data3) {
+    var res = [];
+    for (var i = 0; i < data3.length; i++) {
+        var geoCoord = geoCoordMap[data3[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data3[i].name,
+                value: geoCoord.concat(data3[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option3 = {
+    backgroundColor: '#9c3022',
+    title: {
+        text: 'Data about something in China',
+        subtext: "修改自王叮叮当当响http://gallery.echartsjs.com/editor.html?c=xr1rJH6gQW",
+        textStyle: {
+            color: '#fff',
+            fontSize: 17,
+        }
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+
+    geo: {
+        map: 'china',
+        // silent: true,
+        label: {
+            emphasis: {
+                show: false
+            }
+        },
+        roam: true,
+        itemStyle: {
+            normal: {
+                color: 'transparent',
+                borderColor: '#fff',
+            }
+        },
+        zlevel: 1
+    },
+    series: [{
+        type: 'map',
+        map: 'china',
+        geoIndex: 0,
+        // silent: true,
+        zlevel: 2,
+        label: {
+            emphasis: {
+                show: false
+            }
+        },
+        roam: true,
+        itemStyle: {
+            normal: {
+                color: '#9c3022',
+                borderWidth: 1,
+                borderColor: '#fff',
+            },
+            emphasis: {
+                color: '#000',
+                borderWidth: 1,
+                borderColor: '#fff',
+            }
+        }
+    }, {
+        name: 'point',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        zlevel: 3,
+        data: convertData(data3),
+        symbolSize: function(val) {
+            return val[2] / 4;
+        },
+        label: {
+            normal: {
+                formatter: '{b}',
+                position: 'right',
+
+                show: false,
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 20,
+
+                }
+            },
+            emphasis: {
+                show: true
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: 'rgba(255, 255, 255, 0.75)',
+                opacity: 1
+            }
+        },
+        animationDelay: function(idx) {
+            return idx * 10;
+        }
+    }],
+    animationDelayUpdate: function(idx) {
+        return idx * 100;
+    }
+};
+
+function chartClickEvent(params) {
+    var name = params.data.name;
+    var seriesModel = myChart3.getModel().getSeriesByIndex(0);
+    var point = seriesModel.coordinateSystem._nameCoordMap['_ec_' + name];
+    option3.series[0].center = point; //[108.55,34.32]
+    option3.series[0].zoom = 5;
+
+    option3.geo.center = point;
+    option3.geo.zoom = 5;
+    myChart3.setOption(option);
+}
+
+function panelClickEvent() {
+    option3.series[0].center = null; //[108.55,34.32]
+    option3.series[0].zoom = null;
+
+    option3.geo.center = null;
+    option3.geo.zoom = null;
+    myChart3.setOption(option3);
+}
+
+myChart3.on('click', chartClickEvent);
+
+myChart3.on('mouseover', function() {
+    myChart3.on('click', chartClickEvent);
+    $("#chart-panel").off('click');
+});
+
+myChart3.on('mouseout', function() {
+    myChart3.off('click', chartClickEvent);
+    $("#chart-panel").on('click', panelClickEvent);
+});
+
+;
+if (option3 && typeof option3 === "object") {
+    myChart3.setOption(option3, true);
+}
+$(window).on('resize', function(){
+    if(myChart3 != null && myChart3 != undefined){
+        myChart3.resize();
+    }
+});
+
+
+
+var dom4 = document.getElementById("container4");
+var myChart4 = echarts.init(dom4);
+var app4 = {};
+var option4 = null;
+var UPDATE_DURATION = 100;
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+var audioContext = new AudioContext();
+
+var oReq = new XMLHttpRequest();
+oReq.open('GET', 'data/asset/sound/equinoxCover.mp4', true);
+oReq.responseType = 'arraybuffer';
+
+oReq.onload = function(e) {
+    audioContext.decodeAudioData(oReq.response, initVisualizer);
+};
+oReq.send();
+
+function initVisualizer(audioBuffer) {
+    inited = true;
+
+    var source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+
+    // Must invoked right after click event
+    if (source.noteOn) {
+        source.noteOn(0);
+    }
+    else {
+        source.start(0);
+    }
+
+    var analyzer = audioContext.createAnalyser();
+    var gainNode = audioContext.createGain();
+    analyzer.fftSize = 4096;
+
+    gainNode.gain.value = 1;
+    source.connect(gainNode);
+    gainNode.connect(analyzer);
+    analyzer.connect(audioContext.destination);
+
+    var frequencyBinCount = analyzer.frequencyBinCount;
+    var dataArray = new Uint8Array(frequencyBinCount);
+
+
+    var beta = 0;
+    function update() {
+        analyzer.getByteFrequencyData(dataArray);
+
+        var item = [];
+        var size = 50;
+        var dataProvider = [];
+
+        for (var i = 0; i < size * size; i++) {
+            var x = i % size;
+            var y = Math.floor(i / size);
+            var dx = x - size / 2;
+            var dy = y - size / 2;
+
+            var angle = Math.atan2(dy, dx);
+            if (angle < 0) {
+                angle = Math.PI * 2 + angle;
+            }
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            var idx = Math.min(
+                frequencyBinCount - 1, Math.round(angle / Math.PI / 2 * 60 + dist * 60) + 100
+            );
+
+            var val = Math.pow(dataArray[idx] / 100, 3);
+            dataProvider.push([x, y, Math.max(val, 0.1)]);
+        }
+
+        myChart4.setOption({
+            grid3D: {
+                viewControl: {
+                    beta: beta,
+                    alpha: Math.sin(beta / 10 + 40) * (beta % 10 + 5) / 15 * 30 + 30,
+                    distance: Math.cos(beta / 50 + 20) * (beta % 10 + 5) / 15 * 50 + 80,
+                    animationDurationUpdate: UPDATE_DURATION,
+                    animationEasingUpdate: 'linear'
+                }
+            },
+            series: [{
+                data: dataProvider
+            }]
+        });
+        beta += 2;
+
+        setTimeout(update, UPDATE_DURATION);
+    };
+
+    update();
+}
+
+option4 = {
+    tooltip: {},
+    visualMap: {
+        show: false,
+        min: 0.1,
+        max: 4,
+        inRange: {
+            color: ['#001e00','#073c45','#18cae6','#b9eff7','#fff']
+        }
+    },
+    xAxis3D: {
+        type: 'value'
+    },
+    yAxis3D: {
+        type: 'value'
+    },
+    zAxis3D: {
+        type: 'value',
+        min: -6,
+        max: 6
+    },
+    grid3D: {
+        show: false,
+        environment: '#000',
+        viewControl: {
+            distance: 100
+        },
+        postEffect: {
+            enable: true,
+            FXAA: {
+                enable: true
+            }
+        },
+        light: {
+            main: {
+                shadow: true,
+                intensity: 10,
+                quality: 'high'
+            },
+            ambientCubemap: {
+                texture: 'data-gl/asset/canyon.hdr',
+                exposure: 0,
+                diffuseIntensity: 0.2
+            }
+        }
+    },
+    series: [{
+        type: 'bar3D',
+        silent: true,
+        shading: 'lambert',
+        data: [],
+        barSize: 1,
+        lineStyle: {
+            width: 4
+        },
+        // animation: false,
+        animationDurationUpdate: UPDATE_DURATION
+    }]
+};
+if (option4 && typeof option4 === "object") {
+    myChart4.setOption(option4, true);
+}
+$(window).on('resize', function(){
+    if(myChart4 != null && myChart4 != undefined){
+        myChart4.resize();
+    }
+});
+
+
+
+var dom5 = document.getElementById("container5");
+var myChart5 = echarts.init(dom5);
+var app5 = {};
+var option5 = null;
+
+var uploadedDataURL5 = "asset/get/s/data-1482909892121-BJ3auk-Se.json";
+myChart5.showLoading();
+$.getJSON(uploadedDataURL5, function(geoJson) {
+    echarts.registerMap('jiangxi', geoJson);
+    myChart5.hideLoading();
+    var geoCoordMap = {
+        '济南市':[117.121225,36.66466],
+        '吉安市':[114.986373,27.111699],
+        '上饶市':[117.971185,28.44442],
+        '九江市':[115.992811,29.712034],
+        '抚州市':[116.358351,27.98385],
+        '宜春市':[114.391136,27.8043],
+        '南昌市':[115.892151,28.676493],
+        '景德镇市':[117.214664,29.29256],
+        '萍乡市':[113.852186,27.622946],
+        '鹰潭市':[117.033838,28.238638],
+        '新余市':[114.930835,27.810834],
+    }
+    var data = [
+        {name: '济南市', value: 199},
+        {name: '吉安市', value: 39},
+        {name: '上饶市', value: 152},
+        {name: '九江市', value: 299},
+        {name: '抚州市', value: 89},
+        {name: '宜春市', value: 52},
+        {name: '南昌市', value: 9},
+        {name: '景德镇市', value: 352},
+        {name: '萍乡市', value: 99},
+        {name: '鹰潭市', value: 39},
+        {name: '新余市', value: 480},
+    ];
+    var max = 480, min = 9; // todo
+    var maxSize4Pin = 100, minSize4Pin = 20;
+
+    var convertData = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var geoCoord = geoCoordMap[data[i].name];
+            if (geoCoord) {
+                res.push({
+                    name: data[i].name,
+                    value: geoCoord.concat(data[i].value)
+                });
+            }
+        }
+        return res;
+    };
+
+
+    option5 = {
+        backgroundColor: '#021926',
+        title: {
+            text: '“绿色金融” - 江西省',
+            subtext: '',
+            x: 'center',
+            textStyle: {
+                color: '#ccc'
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                if(typeof(params.value)[2] == "undefined"){
+                    return params.name + ' : ' + params.value;
+                }else{
+                    return params.name + ' : ' + params.value[2];
+                }
+            }
+        },
+        legend: {
+            orient: 'vertical',
+            y: 'bottom',
+            x: 'right',
+            data: ['credit_pm2.5'],
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        visualMap: {
+            show: false,
+            min: 0,
+            max: 500,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'], // 文本，默认为数值文本
+            calculable: true,
+            seriesIndex: [1],
+            inRange: {
+                color: ['#0f0c29', '#302b63', '#24243e']
+            }
+        },
+        geo: {
+            show: true,
+            map: 'jiangxi',
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false,
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: 'transparent',
+                    borderColor: '#3fdaff',
+                    borderWidth: 2,
+                    shadowColor: 'rgba(63, 218, 255, 0.5)',
+                    shadowBlur: 30
+                },
+                emphasis: {
+                    areaColor: '#2B91B7',
+                }
+            }
+        },
+        series : [
+            {
+                name: 'light',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: function (val) {
+                    return val[2] / 10;
+                },
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#05C3F9'
+                    }
+                }
+            },
+            {
+                type: 'map',
+                map: 'jiangxi',
+                geoIndex: 0,
+                aspectScale: 0.75, //长宽比
+                showLegendSymbol: false, // 存在legend时显示
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false,
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#031525',
+                        borderColor: '#3B5077',
+                    },
+                    emphasis: {
+                        areaColor: '#2B91B7'
+                    }
+                },
+                animation: false,
+                data: data
+            },
+            {
+                name: 'Top 5',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data.sort(function (a, b) {
+                    return b.value - a.value;
+                }).slice(0, 5)),
+                symbolSize: function (val) {
+                    return val[2] / 10;
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#05C3F9',
+                        shadowBlur: 10,
+                        shadowColor: '#05C3F9'
+                    }
+                },
+                zlevel: 1
+            },
+
+        ]
+    };
+    myChart5.setOption(option5);
+});
+;
+if (option5 && typeof option5 === "object") {
+    myChart5.setOption(option5, true);
+}
+$(window).on('resize', function(){
+    if(myChart5 != null && myChart5 != undefined){
+        myChart5.resize();
+    }
+});
+
+       </script>
+   </body>
+</html>
