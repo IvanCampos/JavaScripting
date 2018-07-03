@@ -23,7 +23,7 @@
     option = null;
 
     option = {
-        backgroundColor: '#212121',
+        backgroundColor: getColorFromQueryParam(),
         grid: {
             left: '3%',
             right: '3%',
@@ -116,6 +116,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#212121";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>

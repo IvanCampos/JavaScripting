@@ -280,9 +280,7 @@
         }
     ]
 
-
     var option = {
-        //  backgroundColor: '#25499F',
         baseOption: {
             animationDurationUpdate: 1000,
             animationEasingUpdate: 'quinticInOut',
@@ -341,7 +339,7 @@
                     return ele.time
                 })
             },
-            //  backgroundColor: '#25499F',
+            backgroundColor: getColorFromQueryParam(),
             title: [{
                 //  text: '基于18年5月4日对gallery的爬虫结果',
                 //  subtext: 'GDP单位:亿元',
@@ -455,6 +453,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#142058";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>

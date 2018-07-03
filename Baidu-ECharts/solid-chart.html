@@ -41,7 +41,7 @@
     }
     var colors = ["#036BC8","#4A95FF","#5EBEFC","#2EF7F3","#FFFFFF"];
     option = {
-        backgroundColor: '#0f375f',
+        backgroundColor: getColorFromQueryParam(),
         title : {text: title,textAlign:'left',textStyle:{color:"#fff",fontSize:"16",fontWeight:"normal"}},
         legend: {
             show:true,left:"right",data:legendData,y:"5%",
@@ -81,6 +81,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#0f375f";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>

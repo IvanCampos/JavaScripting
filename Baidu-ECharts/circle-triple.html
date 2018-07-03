@@ -21,6 +21,8 @@
     var app = {};
     option = null;
 
+    var bgColor = getColorFromQueryParam();
+
     var color= ['#fb734e', '#e32f46','#94d96c', '#0bbcb7','#1a9bfc','#7049f0'];
     var dataStyle = {
         normal: {
@@ -50,7 +52,7 @@
         }
     };
     option = {
-        backgroundColor: '#142058',
+        backgroundColor: bgColor,
         title: {
             text: '匹配度',
             x: 'center',
@@ -197,6 +199,20 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+    var color = "#142058";
+    if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+	    color = "#"+p[1];
+	}
+
+	return color;
+}
+
 </script>
 </body>
 </html>

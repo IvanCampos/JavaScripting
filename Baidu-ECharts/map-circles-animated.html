@@ -580,7 +580,7 @@
     };
 
     option = {
-        backgroundColor: '#9c3022',
+        backgroundColor: getColorFromQueryParam(),
         title: {
             text: 'Data about something in China',
             subtext: "修改自王叮叮当当响http://gallery.echartsjs.com/editor.html?c=xr1rJH6gQW",
@@ -716,6 +716,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#9c3022";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>

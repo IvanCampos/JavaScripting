@@ -191,7 +191,7 @@
         });
 
         option = {
-            backgroundColor: '#404a59',
+            backgroundColor: getColorFromQueryParam(),
             title: {
                 text: '天津迁徙',
                 subtext: '数据可更换，去掉头尾注释可直接应用到本地',
@@ -278,6 +278,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#404a59";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>

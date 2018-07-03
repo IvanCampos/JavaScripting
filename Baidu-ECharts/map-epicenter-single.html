@@ -82,7 +82,7 @@
 
 
         option = {
-            backgroundColor: '#021926',
+            backgroundColor: getColorFromQueryParam(),
             title: {
                 text: '“绿色金融” - 江西省',
                 subtext: '',
@@ -270,6 +270,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+function getColorFromQueryParam() {
+	var color = "#021926";
+	if (!window.location.search) return color;
+
+	let params = new URLSearchParams(window.location.search);
+
+	for (let p of params) {
+		color = "#"+p[1];
+	}
+
+	return color;
+}
 </script>
 </body>
 </html>
