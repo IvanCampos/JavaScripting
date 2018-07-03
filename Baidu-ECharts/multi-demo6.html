@@ -39,64 +39,94 @@
    <body style="background-color: black;">
    <div class="row">
        <div id="container" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/godzilla.html"></iframe>
+		   <iframe id="frame1" class="iframe" src="godzilla.html?="></iframe>
 	   </div>
 	   <div id="container2" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/transparent-bar3d.html"></iframe>
+		   <iframe id="frame2" class="iframe" src="transparent-bar3d.html?="></iframe>
 	   </div>
 	   <div id="container3" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/map-epicenter-single.html"></iframe>
+		   <iframe id="frame3" class="iframe" src="map-epicenter-single.html?="></iframe>
 	   </div>
 	   <div id="container4" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/map-circles-animated.html"></iframe>
+		   <iframe id="frame4" class="iframe" src="map-circles-animated.html?="></iframe>
 	   </div>
    </div>
    <div class="row">
 	   <div id="container5" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/sunburst-book.html"></iframe>
+		   <iframe id="frame5" class="iframe" src="sunburst-book.html?="></iframe>
 	   </div>
 	   <div id="container6" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/tron-lines.html"></iframe>
+		   <iframe id="frame6" class="iframe" src="tron-lines.html?="></iframe>
 	   </div>
 	   <div id="container7" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/realtime-bars.html"></iframe>
+		   <iframe id="frame7" class="iframe" src="realtime-bars.html?="></iframe>
 	   </div>
 	   <div id="container8" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/circle-triple.html"></iframe>
+		   <iframe id="frame8" class="iframe" src="circle-triple.html?="></iframe>
 	   </div>
    </div>
    <div class="row">
 	   <div id="container9" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/force-connect.html"></iframe>
+		   <iframe id="frame9" class="iframe" src="force-connect.html?="></iframe>
 	   </div>
 	   <div id="container10" class="column25">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/horizontal-github-epicenter.html"></iframe>
+		   <iframe id="frame10" class="iframe" src="horizontal-github-epicenter.html?="></iframe>
 	   </div>
-	   <div id="container12" class="column50">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines3d-flights-gl.html"></iframe>
-	   </div>
-   </div>
-   <div class="row">
-	   <div id="container13">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/solid-chart.html"></iframe>
+	   <div id="container11" class="column50">
+		   <iframe id="frame11" class="iframe" src="lines3d-flights-gl.html?="></iframe>
 	   </div>
    </div>
    <div class="row">
+	   <div id="container12">
+		   <iframe id="frame12" class="iframe" src="solid-chart.html?="></iframe>
+	   </div>
+   </div>
+   <div class="row">
+	   <div id="container13" class="column20">
+		   <iframe id="frame13" class="iframe" src="lines3d-flights.html?="></iframe>
+	   </div>
 	   <div id="container14" class="column20">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines3d-flights.html"></iframe>
+		   <iframe id="frame14" class="iframe" src="map-night-lines.html?="></iframe>
 	   </div>
 	   <div id="container15" class="column20">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/map-night-lines.html"></iframe>
+		   <iframe id="frame15" class="iframe" src="globe-layers.html?="></iframe>
 	   </div>
 	   <div id="container16" class="column20">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/globe-layers.html"></iframe>
+		   <iframe id="frame16" class="iframe" src="lines-airline.html?="></iframe>
 	   </div>
 	   <div id="container17" class="column20">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines-airline.html"></iframe>
-	   </div>
-	   <div id="container18" class="column20">
-		   <iframe class="iframe" src="http://ivancampos.github.io/JavaScripting/Baidu-ECharts/lines-bmap-effect.html"></iframe>
+		   <iframe id="frame17" class="iframe" src="lines-bmap-effect.html?="></iframe>
 	   </div>
    </div>
+   <script>
+       getColorFromQueryParam();
+       function getColorFromQueryParam() {
+           var color = "000000";
+           if (!window.location.search) return color;
+
+           let params = new URLSearchParams(window.location.search);
+
+           for (let p of params) {
+               color = p[1];
+           }
+           $("#frame1").attr('src' , $("#frame1").attr('src') + color);
+           $("#frame2").attr('src' , $("#frame2").attr('src') + color);
+           $("#frame3").attr('src' , $("#frame3").attr('src') + color);
+           $("#frame4").attr('src' , $("#frame4").attr('src') + color);
+           $("#frame5").attr('src' , $("#frame5").attr('src') + color);
+           $("#frame6").attr('src' , $("#frame6").attr('src') + color);
+           $("#frame7").attr('src' , $("#frame7").attr('src') + color);
+           $("#frame8").attr('src' , $("#frame8").attr('src') + color);
+           $("#frame9").attr('src' , $("#frame9").attr('src') + color);
+           $("#frame10").attr('src' , $("#frame10").attr('src') + color);
+           $("#frame11").attr('src' , $("#frame11").attr('src') + color);
+           $("#frame12").attr('src' , $("#frame12").attr('src') + color);
+           $("#frame13").attr('src' , $("#frame13").attr('src') + color);
+           $("#frame14").attr('src' , $("#frame14").attr('src') + color);
+           $("#frame15").attr('src' , $("#frame15").attr('src') + color);
+           $("#frame16").attr('src' , $("#frame16").attr('src') + color);
+           $("#frame17").attr('src' , $("#frame17").attr('src') + color);
+       }
+   </script>
    </body>
 </html>
