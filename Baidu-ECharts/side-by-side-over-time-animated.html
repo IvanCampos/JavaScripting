@@ -9,17 +9,11 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     option = {
         title: {
@@ -31,7 +25,7 @@
         yAxis: {},
         series: [{
             type: 'line',
-            data:[220, 182, 191, 234, 290, 330, 310]
+            data: [220, 182, 191, 234, 290, 330, 310]
         }]
     };
     var myData = ['彝族', '德昂族', '哈尼族', '傣族', '壮族', '苗族', '傈僳族', '拉祜族', '佤族', '纳西族', '瑶族', '景颇族', '布依族', '布朗族', '阿昌族', '独龙族'];
@@ -69,13 +63,13 @@
 
     option = {
         baseOption: {
-            backgroundColor: '#000',
+            backgroundColor: getColorFromQueryParam(),
             timeline: {
                 show: true,
                 axisType: 'category',
                 tooltip: {
                     show: true,
-                    formatter: function(params) {
+                    formatter: function (params) {
                         console.log(params);
                         return params.name + '年数据统计';
                     }
@@ -150,7 +144,7 @@
                 bottom: 60,
                 containLabel: true,
                 width: '46%',
-            }, ],
+            },],
 
             xAxis: [
                 {
@@ -206,7 +200,7 @@
                             type: 'solid',
                         },
                     },
-                }, ],
+                },],
             yAxis: [{
                 type: 'category',
                 inverse: true,
@@ -246,7 +240,7 @@
                     },
 
                 },
-                data: myData.map(function(value) {
+                data: myData.map(function (value) {
                     return {
                         value: value,
                         textStyle: {
@@ -274,7 +268,7 @@
 
                 },
                 data: myData,
-            }, ],
+            },],
             series: [],
 
         },
@@ -355,17 +349,29 @@
             ]
         });
     }
-
-
     ;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

@@ -9,18 +9,11 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
-<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     option = {
         backgroundColor: getColorFromQueryParam(),
@@ -57,10 +50,10 @@
         },
         yAxis: {
             name: '人数',
-            nameTextStyle:{
-                color:'#fbc52c',
-                fontSize:12,
-                padding:[0,40,10,0]
+            nameTextStyle: {
+                color: '#fbc52c',
+                fontSize: 12,
+                padding: [0, 40, 10, 0]
             },
             show: true,
             type: 'value',
@@ -107,28 +100,28 @@
             data: [25, 230, 140, 20, 25]
         }]
     };
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#212121";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#212121";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

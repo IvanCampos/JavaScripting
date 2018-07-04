@@ -9,91 +9,85 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
-    var xAxisData = ['2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10','2018-11','2018-12'];
-    var legendData= ['投诉量','解决量','投诉解决率'];
+    var option = null;
+
+    var xAxisData = ['2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10', '2018-11', '2018-12'];
+    var legendData = ['投诉量', '解决量', '投诉解决率'];
     var title = "多数据面积图";
     var serieData = [];
     var metaDate = [
-        [20, 4, 10, 20, 30, 20, 10, 17,14, 12, 30, 23],
-        [20, 20, 50, 20, 10, 30, 20, 18,20, 19, 30, 20],
-        [10,20, 40, 30, 20, 10, 10, 30, 23, 13, 10 ,30]
+        [20, 4, 10, 20, 30, 20, 10, 17, 14, 12, 30, 23],
+        [20, 20, 50, 20, 10, 30, 20, 18, 20, 19, 30, 20],
+        [10, 20, 40, 30, 20, 10, 10, 30, 23, 13, 10, 30]
     ]
-    for(var v=0; v < legendData.length ; v++){
+    for (var v = 0; v < legendData.length; v++) {
         var serie = {
-            name: legendData[v],type: 'line',stack: 'area',symbol:"circle",
-            symbolSize:0,hoverAnimation:false,lineStyle:{normal:{width:0}},
+            name: legendData[v], type: 'line', stack: 'area', symbol: "circle",
+            symbolSize: 0, hoverAnimation: false, lineStyle: {normal: {width: 0}},
             areaStyle: {normal: {}},
             data: metaDate[v]
         }
         serieData.push(serie)
     }
-    var colors = ["#036BC8","#4A95FF","#5EBEFC","#2EF7F3","#FFFFFF"];
+    var colors = ["#036BC8", "#4A95FF", "#5EBEFC", "#2EF7F3", "#FFFFFF"];
     option = {
         backgroundColor: getColorFromQueryParam(),
-        title : {text: title,textAlign:'left',textStyle:{color:"#fff",fontSize:"16",fontWeight:"normal"}},
+        title: {text: title, textAlign: 'left', textStyle: {color: "#fff", fontSize: "16", fontWeight: "normal"}},
         legend: {
-            show:true,left:"right",data:legendData,y:"5%",
-            itemWidth:18,itemHeight:12,textStyle:{color:"#fff",fontSize:14},
+            show: true, left: "right", data: legendData, y: "5%",
+            itemWidth: 18, itemHeight: 12, textStyle: {color: "#fff", fontSize: 14},
         },
-        color:colors,
-        grid: {left: '2%',top:"10%",bottom: "5%",right:"5%",containLabel: true},
-        tooltip : { trigger: 'axis',axisPointer : { type : 'shadow'}},
-        xAxis : [
+        color: colors,
+        grid: {left: '2%', top: "10%", bottom: "5%", right: "5%", containLabel: true},
+        tooltip: {trigger: 'axis', axisPointer: {type: 'shadow'}},
+        xAxis: [
             {
-                type : 'category',
-                boundaryGap : false,
-                axisTick: {show:false},
-                splitLine: {show:false},
-                axisLine: {show:true,lineStyle:{color:'#cfcfcf',} },
-                axisLabel:{interval:0,textStyle:{color:'#9ea7c4',fontSize:14} },
-                data : xAxisData
+                type: 'category',
+                boundaryGap: false,
+                axisTick: {show: false},
+                splitLine: {show: false},
+                axisLine: {show: true, lineStyle: {color: '#cfcfcf',}},
+                axisLabel: {interval: 0, textStyle: {color: '#9ea7c4', fontSize: 14}},
+                data: xAxisData
             }
         ],
-        yAxis : [
+        yAxis: [
             {
-                type : 'value',max:100,
-                axisTick: {show:false},
-                splitLine: {show:false},
-                axisLine: {show:true,lineStyle:{color:'#cfcfcf',} },
-                axisLabel:{formatter:"{value}%",textStyle:{color:'#9ea7c4',fontSize:14} },
+                type: 'value', max: 100,
+                axisTick: {show: false},
+                splitLine: {show: false},
+                axisLine: {show: true, lineStyle: {color: '#cfcfcf',}},
+                axisLabel: {formatter: "{value}%", textStyle: {color: '#9ea7c4', fontSize: 14}},
             }
         ],
-        series:serieData
+        series: serieData
     };
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#0f375f";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#0f375f";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

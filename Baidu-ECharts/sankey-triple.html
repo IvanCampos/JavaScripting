@@ -9,53 +9,40 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var uploadedDataURL = "asset/get/s/data-1510243457894-H15FneMyz.json";
-
 
     myChart.showLoading();
 
     $.getJSON(uploadedDataURL, function (data) {
         myChart.hideLoading();
 
-
         myChart.setOption(option = {
-            backgroundColor: '#FFFFFF',
-
+            backgroundColor: getColorFromQueryParam(),
             title: {
-                text: 'Sankey Diagram'
+                text: 'Sankey Diagram',
+                show: false
             },
-
             tooltip: {
                 trigger: 'item',
                 triggerOn: 'mousemove'
             },
-
             series: [
                 {
                     type: 'sankey',
                     layout: 'none',
                     data: data.nodes,
                     links: data.links,
-
                     color: [
                         '#30588C',
                         '#77C3F2',
                         '#FAA805'
                     ],
-
-
                     itemStyle: {
                         normal: {
                             borderWidth: 1,
@@ -75,16 +62,27 @@
         });
     });
 
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-    ;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    function getColorFromQueryParam() {
+        var color = "#FFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>
