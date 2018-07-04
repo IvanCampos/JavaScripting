@@ -18,9 +18,8 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
+    var option = null;
+
     var countries = ['奥地利', '比利时', '加拿大', '智利', '中国', '捷克共和国', '德国', '丹麦', '西班牙', '爱沙尼亚', '芬兰', '法国', '英国', '希腊', '匈牙利', '爱尔兰', '以色列', '意大利', '日本', '大韩民国', '卢森堡', '墨西哥', '荷兰', '挪威', '波兰', '葡萄牙', '罗马尼亚', '俄罗斯联邦', '新加坡', '斯洛伐克共和国', '瑞典', '土耳其', '美国'];
 
     var years = ['2011', '2012', '2013', '2014'];
@@ -304,7 +303,7 @@
                 },
                 data: years
             },
-            backgroundColor: '#333',
+            backgroundColor: getColorFromQueryParam(),
             title: {
                 text: '',
                 textAlign: 'center',
@@ -518,8 +517,6 @@
         });
     }
 
-
-    ;
 if (option && typeof option === "object") {
 	myChart.setOption(option, true);
 }
@@ -528,6 +525,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+    function getColorFromQueryParam() {
+        var color = "#333";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

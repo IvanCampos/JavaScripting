@@ -18,8 +18,7 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var rug = "/asset/get/s/data-1528704024268-rye72iigQ.js";
 
@@ -375,7 +374,7 @@
         }
     ]
 
-    var convertData = function(data) {
+    var convertData = function (data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
             var geoCoord = geoCoordMap[data[i].name];
@@ -390,7 +389,7 @@
     };
 
     option = {
-        backgroundColor: '#154E90',
+        backgroundColor: getColorFromQueryParam(),
         title: {
             text: '',
             subtext: '',
@@ -480,7 +479,7 @@
                         color: '#fff',
                         fontSize: 9,
                     },
-                    formatter: function(params) {
+                    formatter: function (params) {
                         return params.value[2]
                     }
                 }
@@ -546,7 +545,7 @@
         }]
     };
 
-    $.get(uploadedDataURL, function(geoJson) {
+    $.get(uploadedDataURL, function (geoJson) {
         echarts.registerMap(name, geoJson);
         myChart.setOption(option);
     });
@@ -554,8 +553,8 @@
 
     var k = 1;
     var iCount;
-    setTimeout(function() {
-        iCount = setInterval(function() {
+    setTimeout(function () {
+        iCount = setInterval(function () {
             loading(k);
             k = k + 0.2;
         }, 150);
@@ -586,8 +585,8 @@
 
     }
 
-    setTimeout(function() {
-        setInterval(function() {
+    setTimeout(function () {
+        setInterval(function () {
             var newoption = myChart.getOption();
             if (newoption.geo[0].zoom < 6 && newoption.geo[0].label.show == true) {
                 newoption.geo[0].label.show = false; //隐藏地名,只显示北京与广州
@@ -604,15 +603,27 @@
         }, 500)
     }, 10000);
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#154E90";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

@@ -6,20 +6,13 @@
 <body style="height: 100%; margin: 0">
 <div id="container" style="height: 100%"></div>
 <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     let costChange = {
         changeDate: ['17-04', '17-05', '17-06', '17-07', '17-08', '17-09', '17-10', '17-11', '17-12', '18-01', '18-02', '18-03'],
@@ -30,7 +23,7 @@
     let chartData = {
         xAxisNames: costChange.changeDate,
         seriesData: data,
-        name: '费用',
+        name: 'Name',
         seriesDash: true,
         dashStart: 5
     };
@@ -148,7 +141,7 @@
     }
 
     option = {
-        backgroundColor: '#00265f',
+        backgroundColor: getColorFromQueryParam(),
         color: '#2d8cf0',
         tooltip: {
             axisPointer: {
@@ -159,7 +152,7 @@
                 }
             },
             trigger: 'axis',
-            formatter: function(params, ticket, callback) {
+            formatter: function (params, ticket, callback) {
                 callback;
                 var htmlStr = '';
                 var valMap = {};
@@ -168,7 +161,6 @@
                     var xName = param.name;
                     var seriesName = param.seriesName;
                     var value = param.value;
-                    // var color = param.color;
                     if (value === '-') {
                         continue;
                     }
@@ -177,7 +169,7 @@
                     }
                     htmlStr += '20' + xName + '-01';
                     if (chartData.dashStart && params[0].dataIndex >= chartData.dashStart) {
-                        htmlStr += '预估';
+                        htmlStr += 'HTML';
                     }
                     htmlStr += '<br/><div>';
                     htmlStr += seriesName + '：' + value.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
@@ -191,10 +183,10 @@
             show: false
         },
         grid: {
-            left: 80,
-            bottom: 80,
-            top: 80,
-            right: 80,
+            left: 20,
+            bottom: 20,
+            top: 20,
+            right: 20,
             containLabel: true
         },
         xAxis: {
@@ -233,15 +225,27 @@
         series: seriesData
     };
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#00265f";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

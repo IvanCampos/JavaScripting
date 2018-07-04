@@ -18,9 +18,8 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
+    var option = null;
+
     var geoCoordMap = {
         '上海': [121.4648, 31.2891],
         '尼日利亚': [-4.388361, 11.186148],
@@ -194,7 +193,7 @@
             name: '上海'
         }]
     ];
-    var convertData = function(data) {
+    var convertData = function (data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
             var dataItem = data[i];
@@ -216,9 +215,8 @@
     var series = [];
     [
         ['上海', BJData]
-    ].forEach(function(item, i) {
+    ].forEach(function (item, i) {
         series.push(
-
             {
                 type: 'lines',
                 zlevel: 2,
@@ -259,7 +257,7 @@
                     }
                 },
                 symbol: 'circle',
-                symbolSize: function(val) {
+                symbolSize: function (val) {
                     return 4 + val[2] / 1000; //圆环大小
                 },
                 itemStyle: {
@@ -268,7 +266,7 @@
                         color: '#f00'
                     }
                 },
-                data: item[1].map(function(dataItem) {
+                data: item[1].map(function (dataItem) {
                     return {
                         name: dataItem[0].name,
                         value: geoCoordMap[dataItem[0].name].concat([dataItem[0].value])
@@ -317,7 +315,7 @@
     });
 
     option = {
-        backgroundColor: '#404a59',
+        backgroundColor: getColorFromQueryParam(),
         title: {
             text: '上海',
             left: 'center',
@@ -325,7 +323,8 @@
                 color: '#fff',
                 fontSize: 24
             },
-            padding: [20, 20, 20, 20]
+            //padding: [20, 20, 20, 20],
+            show: false
         },
         tooltip: {
             trigger: 'item',
@@ -336,7 +335,7 @@
             enterable: true,
             transitionDuration: 0,
             extraCssText: 'z-index:100',
-            formatter: function(params, ticket, callback) {
+            formatter: function (params, ticket, callback) {
                 //根据业务自己拓展要显示的内容
                 var res = "";
                 var name = params.name;
@@ -352,7 +351,8 @@
             color: ['#ff3333', 'orange', 'yellow', 'lime', 'aqua'],
             textStyle: {
                 color: '#fff'
-            }
+            },
+            show: false
         },
         geo: {
             map: 'world',
@@ -363,7 +363,7 @@
             },
             roam: true, //是否允许缩放
             layoutCenter: ['50%', '50%'], //地图位置
-            layoutSize: "140%",
+            layoutSize: "150%",
             itemStyle: {
                 normal: {
                     color: 'rgba(51, 69, 89, .5)', //地图背景色
@@ -380,11 +380,12 @@
 
     var counts = option.series[0].data.length; //获取所有闪动圆环数量
     var dataIndex = 0;
+
     //让圆环的提示框自动触发轮播显示
     function autoHoverTip() {
         for (var i = 0; i < counts; i++) {
-            (function(i) {
-                ts = setTimeout(function() {
+            (function (i) {
+                ts = setTimeout(function () {
                     myChart.dispatchAction({
                         type: 'showTip',
                         seriesIndex: 1,
@@ -395,19 +396,32 @@
         }
     }
 
-    setTimeout(function() {
+    setTimeout(function () {
         autoHoverTip();
         tv = setInterval(autoHoverTip, counts * 1000);
     }, 500);
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#404a59";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

@@ -18,33 +18,33 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     option = {
-        backgroundColor: '#1a4377',
+        backgroundColor: getColorFromQueryParam(),
         title: {
+            show: false,
             text: 'Graph 简单示例'
         },
         tooltip: {},
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
-        color:['#83e0ff','#45f5ce','#b158ff'],
+        color: ['#83e0ff', '#45f5ce', '#b158ff'],
         legend: {
-            show: true,
+            show: false,
             data: [
-                {name: '人',textStyle:{color:'#fff'} },
-                {name: '物证',textStyle:{color:'#fff'}},
-                {name: '不明物体',textStyle:{color:'#fff'}}
+                {name: '人', textStyle: {color: '#fff'}},
+                {name: '物证', textStyle: {color: '#fff'}},
+                {name: '不明物体', textStyle: {color: '#fff'}}
             ]
         },
         series: [
             {
                 type: 'graph',
                 layout: 'force',
-                force:{
-                    repulsion:1000,
-                    edgeLength:50
+                force: {
+                    repulsion: 1000,
+                    edgeLength: 50
                 },
                 symbolSize: 50,
                 roam: true,
@@ -56,7 +56,7 @@
                 edgeSymbolSize: [4, 10],
                 edgeLabel: {
                     normal: {
-                        show:true,
+                        show: true,
                         textStyle: {
                             fontSize: 13
                         },
@@ -424,24 +424,36 @@
                         curveness: 0
                     }
                 },
-                categories:[
+                categories: [
                     {name: '人'},
                     {name: '物证'},
                     {name: '不明物体'}
                 ]
             }
         ]
-    }
+    };
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#1a4377";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

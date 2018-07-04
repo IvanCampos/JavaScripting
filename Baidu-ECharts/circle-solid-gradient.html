@@ -9,17 +9,11 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var placeHolderStyle = {
         normal: {
@@ -38,60 +32,64 @@
         }
 
     };
-    var green = ['#95e95a','#4f9b19'];
-    var yellow = ['#f3b650','#b26f00'];
-    var red = ['#d63e3e','#aa1c1c'];
-    var data = [120,90,59,96];
+    var green = ['#95e95a', '#4f9b19'];
+    var yellow = ['#f3b650', '#b26f00'];
+    var red = ['#d63e3e', '#aa1c1c'];
+    var data = [120, 90, 59, 96];
     var col = colch(data);
     var dataW = fz(data);
 
-    function colch(data){
+    function colch(data) {
         var c = [];
-        if(data[0]>=100){
+        if (data[0] >= 100) {
             c = c.concat(green);
-        }else if(data[0]>=80){
+        } else if (data[0] >= 80) {
             c = c.concat(yellow);
-        }else{
+        } else {
             c = c.concat(red);
-        };
+        }
+        ;
 
-        if(data[1]>=90){
+        if (data[1] >= 90) {
             c = c.concat(green);
-        }else if(data[1]>=70){
+        } else if (data[1] >= 70) {
             c = c.concat(yellow);
-        }else{
+        } else {
             c = c.concat(red);
-        };
-        if(data[2]>=80){
+        }
+        ;
+        if (data[2] >= 80) {
             c = c.concat(green);
-        }else if(data[2]>=60){
+        } else if (data[2] >= 60) {
             c = c.concat(yellow);
-        }else{
+        } else {
             c = c.concat(red);
-        };
-        if(data[3]>=100){
+        }
+        ;
+        if (data[3] >= 100) {
             c = c.concat(green);
-        }else if(data[3]>=80){
+        } else if (data[3] >= 80) {
             c = c.concat(yellow);
-        }else{
+        } else {
             c = c.concat(red);
-        };
+        }
+        ;
 
         return c;
     }
-    function fz(data){
+
+    function fz(data) {
         var s = [];
-        for(var i=0;i<4;i++){
-            if(data[i]>=100){
+        for (var i = 0; i < 4; i++) {
+            if (data[i] >= 100) {
                 s[i] = 0;
-            }else{
-                var x = 100-data[i];
+            } else {
+                var x = 100 - data[i];
                 s[i] = x;
             }
         }
         return s;
     }
-
 
     var dataStyle = {
         normal: {
@@ -106,9 +104,8 @@
         }
     };
 
-
     option = {
-        backgroundColor: '#1b1b1b',
+        backgroundColor: getColorFromQueryParam(),
         title: [{
             text: '远程教育',
             left: '26%',
@@ -131,7 +128,7 @@
                 fontSize: '12',
                 textAlign: 'center',
             },
-        },{
+        }, {
             text: '发展党员',
             left: '26%',
             top: '75%',
@@ -142,7 +139,7 @@
                 color: '#fff',
                 textAlign: 'center',
             },
-        },{
+        }, {
             text: '社会服务',
             left: '73%',
             top: '70%',
@@ -156,7 +153,7 @@
         }],
         series: [{
             type: 'pie',
-            hoverAnimation: false, //鼠标经过的特效
+            hoverAnimation: false,
             radius: ['25%', '34%'],
             center: ['27%', '25%'],
             startAngle: 180,
@@ -193,7 +190,7 @@
         },
             {
                 type: 'pie',
-                hoverAnimation: false, //鼠标经过的特效
+                hoverAnimation: false,
                 radius: ['25%', '34%'],
                 center: ['73%', '25%'],
                 startAngle: 180,
@@ -230,7 +227,7 @@
             },
             {
                 type: 'pie',
-                hoverAnimation: false, //鼠标经过的特效
+                hoverAnimation: false,
                 radius: ['25%', '34%'],
                 center: ['27%', '75%'],
                 startAngle: 180,
@@ -302,12 +299,10 @@
 
                 ]
             },
-
-            //外圈的边框
             {
                 // name: '总人数',
                 type: 'pie',
-                hoverAnimation: false, //鼠标经过的特效
+                hoverAnimation: false,
                 radius: ['35%', '36%'],
                 center: ['27%', '25%'],
                 startAngle: 180,
@@ -344,7 +339,7 @@
             {
                 // name: '总人数',
                 type: 'pie',
-                hoverAnimation: false, //鼠标经过的特效
+                hoverAnimation: false,
                 radius: ['35%', '36%'],
                 center: ['73%', '25%'],
                 startAngle: 180,
@@ -381,7 +376,7 @@
             {
                 // name: '总人数',
                 type: 'pie',
-                hoverAnimation: false, //鼠标经过的特效
+                hoverAnimation: false,
                 radius: ['35%', '36%'],
                 center: ['27%', '75%'],
                 startAngle: 180,
@@ -453,15 +448,28 @@
             },
         ]
     };
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#1b1b1b";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

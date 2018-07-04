@@ -9,20 +9,16 @@
 	   <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 	   <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 	   <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-	   <script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-	   <script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-	   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-	   <script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-	   <script type="text/javascript" src="dist/vendors/simplex.js"></script>
 	   <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
        <script type="text/javascript">
 var dom = document.getElementById("container");
 var myChart = echarts.init(dom);
 var app = {};
 option = null;
-app.title = '嵌套环形图';
+app.title = 'TITLE';
 
 option = {
+    backgroundColor: getColorFromQueryParam(),
     tooltip: {
         trigger: 'item',
         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -30,7 +26,8 @@ option = {
     legend: {
         orient: 'vertical',
         x: 'left',
-        data:['hello','营销广告','搜索引擎','邮件营销','联盟广告','视频广告','百度','谷歌','必应','其他']
+        data:['hello','营销广告','搜索引擎','邮件营销','联盟广告','视频广告','百度','谷歌','必应','其他'],
+		show: false
     },
     series: [
         {
@@ -115,7 +112,8 @@ option = {
             ]
         }
     ]
-};;
+};
+
 if (option && typeof option === "object") {
     myChart.setOption(option, true);
 }
@@ -124,6 +122,19 @@ $(window).on('resize', function(){
         myChart.resize();
     }
 });
+
+function getColorFromQueryParam() {
+    var color = "#FFF";
+    if (!window.location.search) return color;
+
+    let params = new URLSearchParams(window.location.search);
+
+    for (let p of params) {
+        color = "#" + p[1];
+    }
+
+    return color;
+}
        </script>
    </body>
 </html>

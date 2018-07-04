@@ -9,26 +9,20 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
-    $.getJSON("https://api.douban.com/v2/movie/top250?count=100&callback=?", {}, function(json) {
+    $.getJSON("https://api.douban.com/v2/movie/top250?count=100&callback=?", {}, function (json) {
         var xx = [];
         var yy = ['1990~94', '1995~99', '2000~04', '2005~09', '2010~14', '2014~19'];
         var data = generateData(json.subjects);
 
         function generateData(value) {
             var arr = [];
-            $.each(value, function(x, y) {
+            $.each(value, function (x, y) {
                 var n = '';
                 if (1990 <= parseInt(y.year) && parseInt(y.year) <= 1994) {
                     n = '1990~94'
@@ -44,8 +38,7 @@
                     n = '2014~19'
                 }
 
-
-                $.each(y.genres, function(i, lx) {
+                $.each(y.genres, function (i, lx) {
                     if (lx != '剧情') {
                         if (xx.indexOf(lx) < 0) {
                             xx.push(lx)
@@ -54,28 +47,33 @@
                     }
 
                 })
-
-
             })
             return arr;
         }
 
         function lab(val) {
             var num = 0;
-            $.each(data, function(i, item) {
+            $.each(data, function (i, item) {
                 if (item.indexOf(val) > -1) {
                     num++
                 }
             })
             return val + num;
         }
+
         option = {
-            backgroundColor: '#333',
+            backgroundColor: getColorFromQueryParam(),
             tooltip: {
-                formatter: function(obj) {
+                formatter: function (obj) {
                     var value = obj.value;
                     return '片名' + '：' + value[6] + '<br>' + '类别' + '：' + value[0] + '<br>';
                 }
+            },
+            grid: {
+                left: 20,
+                top: 20,
+                bottom: 20,
+                right: 20
             },
             visualMap: [
                 // {
@@ -103,7 +101,7 @@
                     textStyle: {
                         color: '#fff'
                     },
-                    formatter: function(value) {
+                    formatter: function (value) {
                         return lab(value);
                     },
                     inRange: {
@@ -148,7 +146,7 @@
                 data: data,
                 label: {
                     show: true,
-                    formatter: function(params) {
+                    formatter: function (params) {
                         return params.data[6]
                     }
                 }
@@ -156,15 +154,28 @@
         }
         myChart.setOption(option)
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#333";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

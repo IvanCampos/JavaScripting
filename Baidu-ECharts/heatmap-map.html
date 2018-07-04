@@ -18,8 +18,7 @@
 	   <script type="text/javascript">
 var dom = document.getElementById("container");
 var myChart = echarts.init(dom);
-var app = {};
-option = null;
+var option = null;
 var geoCoordMap = {
     "海门":[121.15,31.89],
     "鄂尔多斯":[109.781327,39.608266],
@@ -227,14 +226,15 @@ var convertData = function (data) {
 option = {
     title: {
         text: '全国主要城市空气质量',
-        subtext: 'data from PM25.in',
-        sublink: 'http://www.pm25.in',
+        //subtext: 'data from PM25.in',
+        //sublink: 'http://www.pm25.in',
         left: 'center',
         textStyle: {
             color: '#fff'
-        }
+        },
+		show: false
     },
-    backgroundColor: '#404a59',
+    backgroundColor: getColorFromQueryParam(),
     visualMap: {
         min: 0,
         max: 500,
@@ -244,7 +244,8 @@ option = {
         },
         textStyle: {
             color: '#fff'
-        }
+        },
+		show: false
     },
     geo: {
         map: 'china',
@@ -461,7 +462,8 @@ option = {
             {name: "大庆", value: 279}
         ])
     }]
-};;
+};
+
 if (option && typeof option === "object") {
     myChart.setOption(option, true);
 }
@@ -470,6 +472,19 @@ $(window).on('resize', function(){
         myChart.resize();
     }
 });
+
+function getColorFromQueryParam() {
+    var color = "#404a59";
+    if (!window.location.search) return color;
+
+    let params = new URLSearchParams(window.location.search);
+
+    for (let p of params) {
+        color = "#" + p[1];
+    }
+
+    return color;
+}
        </script>
    </body>
 </html>

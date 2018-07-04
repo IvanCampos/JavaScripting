@@ -9,17 +9,11 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var scaleData = [{
         'name': '工程建设',
@@ -91,7 +85,7 @@
         name: '',
         type: 'pie',
         clockWise: false,
-        radius: [195, 200],
+        radius: [95, 100],
         hoverAnimation: false,
         itemStyle: {
             normal: {
@@ -107,7 +101,8 @@
                         }
                         percent = ((params.value / total) * 100).toFixed(0);
                         if(params.name !== '') {
-                            return params.name + '\n{white|' + '占比' + percent + '%}';
+                            //return params.name + '\n{white|' + '占比' + percent + '%}';
+							return percent + '%';
                         }else {
                             return '';
                         }
@@ -122,7 +117,7 @@
         data: data
     }];
     option = {
-        backgroundColor: '#04243E',
+        backgroundColor: getColorFromQueryParam(),
         tooltip: {
             show: false
         },
@@ -133,9 +128,8 @@
             show: false
         },
         series: seriesObj
-    }
+    };
 
-;
 if (option && typeof option === "object") {
 myChart.setOption(option, true);
 }
@@ -144,6 +138,19 @@ $(window).on('resize', function(){
 		myChart.resize();
 	}
 });
+
+    function getColorFromQueryParam() {
+        var color = "#04243E";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

@@ -9,17 +9,11 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var test_data = [{
         "name": "0-13",
@@ -89,7 +83,7 @@
         seriesd.push({
             name: test_data[j]["name"],
             type: 'pie',
-            radius: [(ra*5 + 10)+"%", (7 + ra * 5) +"%" ],
+            radius: [(ra * 5 + 10) + "%", (7 + ra * 5) + "%"],
             itemStyle: {
                 normal: {
                     label: {
@@ -155,31 +149,31 @@
         min: 0,
         max: 100,
         splitNumber: 5,
-        center: ['45%', '75%'], // 默认全局居中
+        center: ['45%', '75%'],
         radius: '80%',
         endAngle: 0,
         startAngle: 180,
         axisLabel: {
             formatter: "{value}%"
         },
-        axisLine: { // 坐标轴线
+        axisLine: {
             lineStyle: {
                 color: [
                     [1, "rgba(203,203,203,1)"]
-                ], //仪表盘颜色
-                width: 2, //仪表盘宽度
+                ],
+                width: 2,
             }
         },
-        axisTick: { // 坐标轴小标记
-            length: 5, // 属性length控制线长
-            lineStyle: { // 属性lineStyle控制线条样式
+        axisTick: {
+            length: 5,
+            lineStyle: {
                 color: 'auto'
             }
         },
-        splitLine: { // 分隔线
+        splitLine: {
             show: true,
-            length: 5, // 属性length控制线长
-            lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+            length: 5,
+            lineStyle: {
                 color: 'auto',
                 width: 1
             }
@@ -187,16 +181,16 @@
         title: {
             show: false
         },
-        detail: { //显示数据
+        detail: {
             show: false,
         },
         pointer: {
             width: 1,
-            shadowColor: '#fff', //默认透明
+            shadowColor: '#fff',
         },
         itemStyle: {
             normal: {
-                color: "#676767", //仪表盘颜色
+                color: "#676767",
             }
         },
         data: [{
@@ -205,10 +199,11 @@
 
     })
     var option = {
+        backgroundColor: getColorFromQueryParam(),
         maxnum: maxData,
         tooltip: {
             show: true,
-            formatter: function(params) {
+            formatter: function (params) {
                 if (params.name == "hide") {
                     return null
                 } else {
@@ -223,6 +218,7 @@
             }
         },
         legend: {
+            show: false,
             itemGap: 5,
             orient: 'vertical',
             align: "left",
@@ -232,34 +228,46 @@
             data: legend
         },
         grid: {
-            top: 8,
-            height: 10,
+            top: 10,
             left: "25%",
             right: '15%',
         },
         series: seriesd
     };
     myChart.on('mouseover', function (params) {
-        if(params.name != "hide"){
-            if(params.name.indexOf("showtip_") != -1){
-                var shownum = parseFloat( params.name.split("_")[1]*100/myChart.getOption().maxnum).toFixed(2);
-            }else{
-                var shownum = parseFloat( params.value*100/myChart.getOption().maxnum).toFixed(2);
+        if (params.name != "hide") {
+            if (params.name.indexOf("showtip_") != -1) {
+                var shownum = parseFloat(params.name.split("_")[1] * 100 / myChart.getOption().maxnum).toFixed(2);
+            } else {
+                var shownum = parseFloat(params.value * 100 / myChart.getOption().maxnum).toFixed(2);
             }
             var series = myChart.getOption().series;
-            option.series[series.length-1].data[0].value = shownum;
-            myChart.setOption(option,true);
+            option.series[series.length - 1].data[0].value = shownum;
+            myChart.setOption(option, true);
         }
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#1a4377";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

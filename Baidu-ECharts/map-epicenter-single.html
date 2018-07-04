@@ -18,37 +18,27 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
-    /**
-     此版本通过设置geoindex && seriesIndex: [1] 属性来实现geo和map共存，来达到hover散点和区域显示tooltip的效果
-
-     默认情况下，map series 会自己生成内部专用的 geo 组件。但是也可以用这个 geoIndex 指定一个 geo 组件。这样的话，map 和 其他 series（例如散点图）就可以共享一个 geo 组件了。并且，geo 组件的颜色也可以被这个 map series 控制，从而用 visualMap 来更改。
-     当设定了 geoIndex 后，series-map.map 属性，以及 series-map.itemStyle 等样式配置不再起作用，而是采用 geo 中的相应属性。
-
-     http://echarts.baidu.com/option.html#series-map.geoIndex
-
-     并且加了pin气泡图标以示数值大小
-     */
+    /* http://echarts.baidu.com/option.html#series-map.geoIndex */
 
     var uploadedDataURL = "asset/get/s/data-1482909892121-BJ3auk-Se.json";
     myChart.showLoading();
-    $.getJSON(uploadedDataURL, function(geoJson) {
+    $.getJSON(uploadedDataURL, function (geoJson) {
         echarts.registerMap('jiangxi', geoJson);
         myChart.hideLoading();
         var geoCoordMap = {
-            '济南市':[117.121225,36.66466],
-            '吉安市':[114.986373,27.111699],
-            '上饶市':[117.971185,28.44442],
-            '九江市':[115.992811,29.712034],
-            '抚州市':[116.358351,27.98385],
-            '宜春市':[114.391136,27.8043],
-            '南昌市':[115.892151,28.676493],
-            '景德镇市':[117.214664,29.29256],
-            '萍乡市':[113.852186,27.622946],
-            '鹰潭市':[117.033838,28.238638],
-            '新余市':[114.930835,27.810834],
+            '济南市': [117.121225, 36.66466],
+            '吉安市': [114.986373, 27.111699],
+            '上饶市': [117.971185, 28.44442],
+            '九江市': [115.992811, 29.712034],
+            '抚州市': [116.358351, 27.98385],
+            '宜春市': [114.391136, 27.8043],
+            '南昌市': [115.892151, 28.676493],
+            '景德镇市': [117.214664, 29.29256],
+            '萍乡市': [113.852186, 27.622946],
+            '鹰潭市': [117.033838, 28.238638],
+            '新余市': [114.930835, 27.810834],
         }
         var data = [
             {name: '济南市', value: 199},
@@ -89,14 +79,15 @@
                 x: 'center',
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+				show: false
             },
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    if(typeof(params.value)[2] == "undefined"){
+                    if (typeof(params.value)[2] == "undefined") {
                         return params.name + ' : ' + params.value;
-                    }else{
+                    } else {
                         return params.name + ' : ' + params.value[2];
                     }
                 }
@@ -170,7 +161,7 @@
                     }
                 }
             },
-            series : [
+            series: [
                 {
                     name: 'light',
                     type: 'scatter',
@@ -261,28 +252,28 @@
         };
         myChart.setOption(option);
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#021926";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#021926";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

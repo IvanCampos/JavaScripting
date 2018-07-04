@@ -9,11 +9,6 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
@@ -21,7 +16,7 @@
     var app = {};
     option = null;
 
-    var subtext='基于18年6月3日对gallery的爬虫结果'
+    var subtext = '基于18年6月3日对gallery的爬虫结果'
     var data = [{
         "time": '收到赞最多的十位作者',
         "data": [{
@@ -316,7 +311,7 @@
                     show: false
                 },
                 checkpointStyle: {
-                    symbol:'none',
+                    symbol: 'none',
                     color: '#bbb',
                     borderColor: '#777',
                     show: false,
@@ -335,7 +330,7 @@
                         borderColor: '#aaa'
                     }
                 },
-                data: data.map(function(ele) {
+                data: data.map(function (ele) {
                     return ele.time
                 })
             },
@@ -348,11 +343,13 @@
                 textStyle: {
                     fontSize: 25,
                     //  color: 'rgba(255,255,255, 0.9)'
-                }
+                },
+				show: false
             }, {
                 subtext: subtext,
                 left: 'center',
-                top: '5%'
+                //top: '5%',
+				show: false
             }],
             //  tooltip: {
             //      formatter: function(params) {
@@ -363,8 +360,8 @@
             //  },
             grid: {
                 left: 10,
-                right: '20%',
-                top: '12%',
+                right: '5%',
+                top: '5%',
                 bottom: 5
             },
             xAxis: {},
@@ -419,7 +416,7 @@
                     }
                 },
 
-                data: data[i].data.map(function(ele) {
+                data: data[i].data.map(function (ele) {
                     return ele.name
                 }).reverse()
             },
@@ -433,9 +430,9 @@
                             formatter: '{b} : {c}'
                         }
                     },
-                    data: data[i].data.map(function(ele) {
+                    data: data[i].data.map(function (ele) {
                         return ele.value
-                    }).sort(function(a, b) {
+                    }).sort(function (a, b) {
                         return a > b
                     })
                 },
@@ -444,28 +441,28 @@
         })
     }
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#142058";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#142058";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

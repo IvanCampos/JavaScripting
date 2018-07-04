@@ -18,10 +18,9 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
-    var axisData = ['周一','周二','周三','很长很长的周四','周五','周六','周日'];
+    var axisData = ['周一', '周二', '周三', '很长很长的周四', '周五', '周六', '周日'];
     var data = axisData.map(function (item, i) {
         return Math.round(Math.random() * 1000 * (i + 1));
     });
@@ -31,25 +30,25 @@
             target: i + 1
         };
     });
-    var effectScatterData=[];
-    //var data=series[item].data;
-    var i=data.length-1;
-    effectScatterData.push([axisData[i],data[i]]);
-
+    var effectScatterData = [];
+    var i = data.length - 1;
+    effectScatterData.push([axisData[i], data[i]]);
 
     links.pop();
     option = {
+        backgroundColor: getColorFromQueryParam(),
         title: {
-            text: '笛卡尔坐标系上的 Graph'
+            text: '笛卡尔坐标系上的 Graph',
+            show: false
         },
         tooltip: {},
         xAxis: {
-            type : 'category',
-            boundaryGap : false,
-            data : axisData
+            type: 'category',
+            boundaryGap: false,
+            data: axisData
         },
         yAxis: {
-            type : 'value'
+            type: 'value'
         },
         series: [
             {
@@ -73,16 +72,16 @@
                 }
             },
             {
-                name:'last',
-                type:'effectScatter',
+                name: 'last',
+                type: 'effectScatter',
                 coordinateSystem: 'cartesian2d',
-                data:effectScatterData,
-                symbolSize:40,
-                showEffectOn:'render',
-                rippleEffect:{
-                    brushType:'stroke'
+                data: effectScatterData,
+                symbolSize: 40,
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
                 },
-                hoverAnimation:true,
+                hoverAnimation: true,
                 itemStyle: {
                     normal: {
                         color: 'purple',
@@ -95,15 +94,27 @@
         ]
     };
 
-    ;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFFFFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

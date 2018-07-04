@@ -20,14 +20,13 @@
     var myChart = echarts.init(dom);
     var app = {};
     option = null;
-  <!-- add demo -->
     app.title = '各城市每个月的雾霾严重程度'
     var hours = ['一月', '二月', '三月', '四月', '五月', '六月', '七月',
-        '八月', '九月', '十月','十一月','十二月'];
+        '八月', '九月', '十月', '十一月', '十二月'];
     var days = ['北京', '成都', '广州',
         '上海', '沈阳'];
 
-    var data =[
+    var data = [
         [0, 0, 123],
         [0, 1, 103],
         [0, 2, 96],
@@ -91,23 +90,24 @@
     ];
 
     option = {
+        backgroundColor: getColorFromQueryParam(),
         tooltip: {
             position: 'top',
-            formatter: function(params) {
-                return params.name+'PM2.5: '+params.value[1]
+            formatter: function (params) {
+                return params.name + 'PM2.5: ' + params.value[1]
             }
         },
         toolbox: {
             show: true,
             feature: {
                 saveAsImage: {
-                    show:true,
-                    excludeComponents :['toolbox'],
+                    show: true,
+                    excludeComponents: ['toolbox'],
                     pixelRatio: 5
                 }
             }
         },
-        title:[],
+        title: [],
         singleAxis: [],
         series: []
     };
@@ -115,7 +115,7 @@
     echarts.util.each(days, function (day, idx) {
         option.title.push({
             textBaseline: 'middle',
-            top: (idx + 1) * 100 / 5-9 + '%',//每个标题的位置
+            top: (idx + 1) * 100 / 5 - 9 + '%',//每个标题的位置
             text: day
         });
         option.singleAxis.push({
@@ -124,11 +124,11 @@
             boundaryGap: false,
             data: hours,
             top: (idx * 100 / 5 + 10) + '%',
-            height: (100 /5 -19) + '%',//5是指有五根轴，这里计算的是每根轴离顶端的距离
-            left:'14%',
+            height: (100 / 5 - 19) + '%',//5是指有五根轴，这里计算的是每根轴离顶端的距离
+            left: '14%',
             axisLabel: {
-                interval:3,
-                margin:30
+                interval: 3,
+                margin: 30
             }
         });
         option.series.push({
@@ -139,7 +139,8 @@
                 normal: {
                     show: true,
                     position: 'top'
-                }},
+                }
+            },
             data: [],
             symbolSize: function (dataItem) {
                 return dataItem[1] * 0.5;
@@ -150,15 +151,28 @@
     echarts.util.each(data, function (dataItem) {
         option.series[dataItem[0]].data.push([dataItem[1], dataItem[2]]);
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

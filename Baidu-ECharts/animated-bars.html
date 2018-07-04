@@ -6,27 +6,19 @@
 <body style="height: 100%; margin: 0">
 <div id="container" style="height: 100%"></div>
 <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
 
-    let name = "直接投资",
+    let name = "Name",
         max = 300,
-        value = 200;
+        value = 250;
 
-    option = {
-        backgroundColor: 'black',
+    var option = {
+        backgroundColor: getColorFromQueryParam(),
         "xAxis": {
             type: 'value',
             "max": max,
@@ -62,14 +54,14 @@
                 }
             }
         }],
-        "series": [{ //分隔
+        "series": [{
             "type": "pictorialBar",
             label: {
-                show: true,
+                show: false,
                 position: 'insideRight',
-                color:'#ddc95a',
-                formatter:"{c}万元",
-                fontSize:20
+                color: '#ddc95a',
+                formatter: "Format",
+                fontSize: 20
             },
             itemStyle: {
                 color: "#6ef3fc"
@@ -88,15 +80,27 @@
         }]
     };
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

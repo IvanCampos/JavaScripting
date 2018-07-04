@@ -18,9 +18,8 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
+    var option = null;
+
     var data = [{
         name: '海门',
         value: 9
@@ -565,7 +564,7 @@
         '大庆': [125.03, 46.58]
     };
 
-    var convertData = function(data) {
+    var convertData = function (data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
             var geoCoord = geoCoordMap[data[i].name];
@@ -587,7 +586,8 @@
             textStyle: {
                 color: '#fff',
                 fontSize: 17,
-            }
+            },
+			show: false
         },
         tooltip: {
             trigger: 'item'
@@ -640,7 +640,7 @@
             coordinateSystem: 'geo',
             zlevel: 3,
             data: convertData(data),
-            symbolSize: function(val) {
+            symbolSize: function (val) {
                 return val[2] / 4;
             },
             label: {
@@ -665,11 +665,11 @@
                     opacity: 1
                 }
             },
-            animationDelay: function(idx) {
+            animationDelay: function (idx) {
                 return idx * 10;
             }
         }],
-        animationDelayUpdate: function(idx) {
+        animationDelayUpdate: function (idx) {
             return idx * 100;
         }
     };
@@ -697,38 +697,38 @@
 
     myChart.on('click', chartClickEvent);
 
-    myChart.on('mouseover', function() {
+    myChart.on('mouseover', function () {
         myChart.on('click', chartClickEvent);
         $("#chart-panel").off('click');
     });
 
-    myChart.on('mouseout', function() {
+    myChart.on('mouseout', function () {
         myChart.off('click', chartClickEvent);
         $("#chart-panel").on('click', panelClickEvent);
     });
 
     ;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#9c3022";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#9c3022";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

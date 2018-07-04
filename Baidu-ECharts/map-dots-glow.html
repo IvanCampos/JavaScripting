@@ -18,13 +18,12 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var uploadedDataURL = "asset/get/s/data-1504673503593-ryd1yZaY-.json";
     myChart.setOption(option = {
-        backgroundColor: '#404a59',
-        title : {
+        backgroundColor: getColorFromQueryParam(),
+        title: {
             text: '中国行政中心分布图',
             subtext: 'From 高德地图',
             sublink: 'http://ditu.amap.com/',
@@ -32,18 +31,19 @@
             top: 'top',
             textStyle: {
                 color: '#fff'
-            }
+            },
+            show: false
         },
         legend: {
-            bottom:10,
-            data: ['首都','省级', '地市', '区县','乡镇街道'],
+            bottom: 10,
+            data: ['首都', '省级', '地市', '区县', '乡镇街道'],
             textStyle: {
                 color: '#ccc'
             }
         },
         geo: {
             map: 'china',
-            roam:'scale',
+            roam: 'scale',
             label: {
                 emphasis: {
                     show: false
@@ -62,8 +62,8 @@
         series: []
     })
     myChart.showLoading()
-    $.getJSON(uploadedDataURL, function(data) {
-        serieData=[];
+    $.getJSON(uploadedDataURL, function (data) {
+        serieData = [];
         for (var x = 0; x < data.length; x += 1) {
             var towns = [[data[x][0][0] / 1000000, data[x][0][1] / 1000000]]
             for (var y = 1; y < data[x].length; y += 1) {
@@ -90,7 +90,7 @@
                         }
                     },
                     data: serieData[3]
-                },{
+                }, {
                     name: '区县',
                     type: 'scatter',
                     coordinateSystem: 'geo',
@@ -98,13 +98,13 @@
                     large: true,
                     itemStyle: {
                         normal: {
-                            color:'rgba(50, 200, 255, 0.8)',
+                            color: 'rgba(50, 200, 255, 0.8)',
                             shadowColor: 'rgba(50, 200, 255, 0.8)',
                             shadowBlur: 30
                         }
                     },
                     data: serieData[2]
-                },{
+                }, {
                     name: '地市',
                     type: 'scatter',
                     coordinateSystem: 'geo',
@@ -112,13 +112,13 @@
                     large: true,
                     itemStyle: {
                         normal: {
-                            color:'rgba(125, 255, 255, 0.8)',
+                            color: 'rgba(125, 255, 255, 0.8)',
                             shadowColor: 'rgba(125, 255, 255, 0.8)',
                             shadowBlur: 60
                         }
                     },
                     data: serieData[1]
-                },{
+                }, {
                     name: '省级',
                     type: 'scatter',
                     coordinateSystem: 'geo',
@@ -133,7 +133,7 @@
                         }
                     },
                     data: serieData[0]
-                },{
+                }, {
                     name: '首都',
                     type: 'scatter',
                     coordinateSystem: 'geo',
@@ -151,15 +151,29 @@
                 }]
             });
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#404a59";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+
 </script>
 </body>
 </html>

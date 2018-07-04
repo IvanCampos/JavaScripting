@@ -9,20 +9,12 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
+    var option = null;
     myChart.showLoading();
-
 
     var data2 = {
         "name": "省核心交换机",
@@ -56,31 +48,31 @@
                                     "children": [{
                                         "name": "ONU001",
                                         "value": 2105,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }, {
                                         "name": "ONU002",
                                         "value": 1316,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }, {
                                         "name": "ONU003",
                                         "value": 3151,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }]
-                                },{
+                                }, {
                                     "name": "PON口002",
 
                                     "children": [{
                                         "name": "ONU001",
                                         "value": 2105,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }, {
                                         "name": "ONU002",
                                         "value": 1316,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }, {
                                         "name": "ONU003",
                                         "value": 3151,
-                                        children:[{name:'stb7376464764847'}]
+                                        children: [{name: 'stb7376464764847'}]
                                     }]
                                 }],
                             }]
@@ -93,17 +85,19 @@
             ]
         }, {
             "name": "省中心CDN"
-        }, ]
+        },]
     };
 
     myChart.hideLoading();
 
     myChart.setOption(option = {
         tooltip: {
+            show: false,
             trigger: 'item',
             triggerOn: 'mousemove'
         },
         legend: {
+            show: false,
             top: '2%',
             left: '3%',
             orient: 'vertical',
@@ -155,15 +149,28 @@
             }
         ]
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFFFFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

@@ -9,18 +9,12 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-  <!-- add demo -->
+    var option = null;
+
     function getVirtulData(year) {
         year = year || '2017';
         var date = +echarts.number.parseDate(year + '-01-01');
@@ -39,7 +33,7 @@
     var data = getVirtulData(2016);
 
     option = {
-        backgroundColor: '#404a59',
+        backgroundColor: getColorFromQueryParam(),
 
         title: {
             top: 30,
@@ -48,21 +42,23 @@
             left: 'center',
             textStyle: {
                 color: '#fff'
-            }
+            },
+			show: false
         },
-        tooltip : {
+        tooltip: {
             trigger: 'item'
         },
         legend: {
             top: '30',
             left: '100',
-            data:['步数', 'Top 12'],
+            data: ['步数', 'Top 12'],
             textStyle: {
                 color: '#fff'
-            }
+            },
+			show: false
         },
         calendar: [{
-            top: 100,
+            //top: 100,
             left: 'center',
             range: ['2016-01-01', '2016-06-30'],
             splitLine: {
@@ -87,7 +83,7 @@
                 }
             }
         }, {
-            top: 340,
+            top: 200,
             left: 'center',
             range: ['2016-07-01', '2016-12-31'],
             splitLine: {
@@ -112,7 +108,7 @@
                 }
             }
         }],
-        series : [
+        series: [
             {
                 name: '步数',
                 type: 'scatter',
@@ -194,15 +190,27 @@
         ]
     };
 
-    ;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#404a59";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

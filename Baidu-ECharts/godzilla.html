@@ -18,14 +18,11 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var tianjin = "asset/get/s/data-1525844720391-Skugj-g0f.json";
 
-    // $(function() {
-    // var myChart = echarts.init(document.getElementById('echar'));
-    $.get(tianjin, function(tjJson) {
+    $.get(tianjin, function (tjJson) {
         echarts.registerMap('tianjin', tjJson);
         myChart.setOption({
             series: [{
@@ -58,10 +55,7 @@
                 name: '东丽',
                 value: 35
             }],
-
-            //  [{name:'蓟县'}, {name:'宁河',value:95}],
         ];
-//值控制圆点大小
         var backData = [
             [{
                 name: '宁河'
@@ -80,7 +74,7 @@
         ];
 
         var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-        var arcAngle = function(data) {
+        var arcAngle = function (data) {
             var j, k;
             for (var i = 0; i < data.length; i++) {
                 var dataItem = data[i];
@@ -94,7 +88,7 @@
             }
         }
 
-        var convertData = function(data) {
+        var convertData = function (data) {
             var res = [];
             for (var i = 0; i < data.length; i++) {
                 var dataItem = data[i];
@@ -128,12 +122,11 @@
         [
             ['1', goData],
             ['2', backData]
-        ].forEach(function(item, i) {
+        ].forEach(function (item, i) {
             series.push({
                 name: item[0],
                 type: 'lines',
                 zlevel: 2,
-                //线特效配置
                 effect: {
                     show: true,
                     period: 6,
@@ -154,7 +147,6 @@
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
                 zlevel: 2,
-                //波纹效果
                 rippleEffect: {
                     period: 2,
                     brushType: 'stroke',
@@ -168,10 +160,8 @@
                         formatter: '{b}'
                     }
                 },
-                //终点形象
                 symbol: 'circle',
-                //圆点大小
-                symbolSize: function(val) {
+                symbolSize: function (val) {
                     return val[2] / 8;
                 },
                 itemStyle: {
@@ -179,7 +169,7 @@
                         show: true
                     }
                 },
-                data: item[1].map(function(dataItem) {
+                data: item[1].map(function (dataItem) {
                     return {
                         name: dataItem[1].name,
                         value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
@@ -193,6 +183,7 @@
         option = {
             backgroundColor: getColorFromQueryParam(),
             title: {
+                show: false,
                 text: '天津迁徙',
                 subtext: '数据可更换，去掉头尾注释可直接应用到本地',
                 left: 'center',
@@ -204,19 +195,15 @@
                 trigger: 'item',
                 formatter: "{b}"
             },
-            //线颜色及飞行轨道颜色
             visualMap: {
                 show: false,
                 min: 0,
                 max: 100,
                 color: ['#fff', '#0000ff', '#000000']
             },
-            //地图相关设置
             geo: {
                 map: 'tianjin',
-                //视角缩放比例
                 zoom: 1,
-                //显示文本样式
                 label: {
                     normal: {
                         show: false,
@@ -230,7 +217,6 @@
                         }
                     }
                 },
-                //鼠标缩放和平移
                 roam: true,
                 itemStyle: {
                     normal: {
@@ -252,7 +238,6 @@
                             globalCoord: false // 缺省为 false
                         },
                         shadowColor: 'rgba(128, 217, 248, 1)',
-                        // shadowColor: 'rgba(255, 255, 255, 1)',
                         shadowOffsetX: -2,
                         shadowOffsetY: 2,
                         shadowBlur: 10
@@ -266,31 +251,29 @@
             series: series
         };
         myChart.setOption(option);
-    })
-// })
+    });
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
 
-function getColorFromQueryParam() {
-	var color = "#404a59";
-	if (!window.location.search) return color;
+    function getColorFromQueryParam() {
+        var color = "#404a59";
+        if (!window.location.search) return color;
 
-	let params = new URLSearchParams(window.location.search);
+        let params = new URLSearchParams(window.location.search);
 
-	for (let p of params) {
-		color = "#"+p[1];
-	}
+        for (let p of params) {
+            color = "#" + p[1];
+        }
 
-	return color;
-}
+        return color;
+    }
 </script>
 </body>
 </html>

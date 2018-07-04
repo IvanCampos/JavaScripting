@@ -23,48 +23,48 @@
 
     var uploadedDataURL = "asset/get/s/data-1525844720391-Skugj-g0f.json";
     myChart.showLoading();
-    $.getJSON(uploadedDataURL, function(geoJson) {
+    $.getJSON(uploadedDataURL, function (geoJson) {
         echarts.registerMap('tianjin', geoJson);
         myChart.hideLoading();
         var geoCoordMap = {
-            '和平':[117.2,39.12],
-            '河东':[117.22,39.12],
-            '河西':[117.22,39.12],
-            '南开':[117.15,39.13],
-            '河北':[117.18,39.15],
-            '红桥':[117.15,39.17],
-            '塘沽':[117.65,39.02],
-            '汉沽':[117.8,39.25],
-            '大港':[117.45,38.83],
-            '东丽':[117.3,39.08],
-            '西青':[117,39.13],
-            '津南':[117.38,38.98],
-            '北辰':[117.13,39.22],
-            '武清':[117.03,39.38],
-            '宝坻':[117.3,39.72],
-            '宁河':[117.82,39.33],
-            '静海':[116.92,38.93],
-            '蓟县':[117.4,40.05],
+            '和平': [117.2, 39.12],
+            '河东': [117.22, 39.12],
+            '河西': [117.22, 39.12],
+            '南开': [117.15, 39.13],
+            '河北': [117.18, 39.15],
+            '红桥': [117.15, 39.17],
+            '塘沽': [117.65, 39.02],
+            '汉沽': [117.8, 39.25],
+            '大港': [117.45, 38.83],
+            '东丽': [117.3, 39.08],
+            '西青': [117, 39.13],
+            '津南': [117.38, 38.98],
+            '北辰': [117.13, 39.22],
+            '武清': [117.03, 39.38],
+            '宝坻': [117.3, 39.72],
+            '宁河': [117.82, 39.33],
+            '静海': [116.92, 38.93],
+            '蓟县': [117.4, 40.05],
         }
         var data = [
-            {name:'和平', value: 199},
-            {name:'河东', value: 39},
-            {name:'河西', value: 152},
-            {name:'南开', value: 299},
-            {name:'河北', value: 89},
-            {name:'红桥', value: 52},
-            {name:'塘沽', value: 9},
-            {name:'汉沽', value: 352},
-            {name:'大港', value: 99},
-            {name:'东丽', value: 39},
-            {name:'西青', value: 480},
-            {name:'津南', value: 481},
-            {name:'北辰', value: 482},
-            {name:'武清', value: 483},
-            {name:'宝坻', value: 484},
-            {name:'宁河', value: 485},
-            {name:'静海', value: 486},
-            {name:'蓟县', value: 487},
+            {name: '和平', value: 199},
+            {name: '河东', value: 39},
+            {name: '河西', value: 152},
+            {name: '南开', value: 299},
+            {name: '河北', value: 89},
+            {name: '红桥', value: 52},
+            {name: '塘沽', value: 9},
+            {name: '汉沽', value: 352},
+            {name: '大港', value: 99},
+            {name: '东丽', value: 39},
+            {name: '西青', value: 480},
+            {name: '津南', value: 481},
+            {name: '北辰', value: 482},
+            {name: '武清', value: 483},
+            {name: '宝坻', value: 484},
+            {name: '宁河', value: 485},
+            {name: '静海', value: 486},
+            {name: '蓟县', value: 487},
         ];
         var max = 480, min = 9; // todo
         var maxSize4Pin = 100, minSize4Pin = 20;
@@ -85,20 +85,22 @@
 
 
         option = {
+            backgroundColor: getColorFromQueryParam(),
             title: {
                 text: '“大数据” - 天津市',
                 subtext: '',
                 x: 'center',
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+                show: false
             },
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    if(typeof(params.value)[2] == "undefined"){
+                    if (typeof(params.value)[2] == "undefined") {
                         return params.name + ' : ' + params.value;
-                    }else{
+                    } else {
                         return params.name + ' : ' + params.value[2];
                     }
                 }
@@ -110,7 +112,8 @@
                 data: ['credit_pm2.5'],
                 textStyle: {
                     color: '#fff'
-                }
+                },
+				show: false
             },
             visualMap: {
                 show: false,
@@ -169,7 +172,7 @@
                     }
                 }
             },
-            series : [
+            series: [
                 {
                     name: 'credit_pm2.5',
                     type: 'scatter',
@@ -231,9 +234,9 @@
                     symbol: 'pin',
                     symbolSize: function (val) {
                         var a = (maxSize4Pin - minSize4Pin) / (max - min);
-                        var b = minSize4Pin - a*min;
-                        b = maxSize4Pin - a*max;
-                        return a*val[2]+b;
+                        var b = minSize4Pin - a * min;
+                        b = maxSize4Pin - a * max;
+                        return a * val[2] + b;
                     },
                     label: {
                         normal: {
@@ -288,15 +291,28 @@
         };
         myChart.setOption(option);
     });
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

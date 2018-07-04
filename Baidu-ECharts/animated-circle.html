@@ -6,67 +6,76 @@
 <body style="height: 100%; margin: 0">
 <div id="container" style="height: 100%"></div>
 <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
 <script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     option = {
-        title:{
-            text:"医疗工作时间",
+        backgroundColor: getColorFromQueryParam(),
+        title: {
+            text: "TITLE",
+            show: false
         },
-        color: ['#2095f2','#f00'],//设置饼图颜色
-        series : [
+        color: ['#2095f2', '#f00'],
+        series: [
             {
-                type:'pie',
-                center:["55%","55%"],//圆心坐标
-                radius : ['50%', '75%'],//设置内外环半径
-                itemStyle : {
-                    normal : {
-                        label : {
-                            show : false//不显示指引线
+                type: 'pie',
+                center: ["55%", "55%"],
+                radius: ['50%', '75%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: false
                         }
                     }
                 },
-                data:[
+                data: [
                     {
-                        value:8,//数值1
+                        value: 8,
                         label: {
                             normal: {
                                 show: true,
                                 position: 'center',
-                                formatter: '20',//显示中间的数字
+                                formatter: '20',
                                 fontSize: 60,
                             }
                         },
                     },
                     {
-                        value:4,//数值2
+                        value: 4,
                     }
                 ]
             }
         ]
     };
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

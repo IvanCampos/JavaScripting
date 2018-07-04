@@ -18,8 +18,7 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
     var uploadedDataURL = "asset/get/s/data-1479372708751-SJpo1lsbl.txt";
 
@@ -284,14 +283,12 @@
             return b.value[3] - a.value[3];
         }).slice(0, 10);
         myChart.setOption(option);
-        // console.log(option);
-        //获取echart中使用的bmap实例
         var map = myChart.getModel().getComponent('bmap').getBMap();
         map.disableDoubleClickZoom();
         map.centerAndZoom("佛山", 13);
 
     });
-;
+
 if (option && typeof option === "object") {
 myChart.setOption(option, true);
 }

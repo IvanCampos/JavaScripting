@@ -22,18 +22,17 @@
     option = null;
 
     option = {
-        backgroundColor:'black',
+        backgroundColor: getColorFromQueryParam(),
         "normal": {
             "top": 200,
             "left": 300,
             "width": 500,
             "height": 400,
-            "zIndex": 6,
-            "backgroundColor": ""
+            "zIndex": 6
         },
         "color": ["rgba(245, 166, 35, 1)", "rgba(19, 173, 255, 1)"],
         "title": {
-            "show": true,
+            "show": false,
             "text": "基础雷达图",
             "left": "40%",
             "top": "1%",
@@ -147,10 +146,10 @@
                     "color": "rgba(245, 166, 35, 0.4)"
                 }
             },
-            itemStyle:{
-                color:'rgba(245, 166, 35, 1)',
-                borderColor:'rgba(245, 166, 35, 0.3)',
-                borderWidth:10,
+            itemStyle: {
+                color: 'rgba(245, 166, 35, 1)',
+                borderColor: 'rgba(245, 166, 35, 0.3)',
+                borderWidth: 10,
             },
             "lineStyle": {
                 "normal": {
@@ -170,7 +169,7 @@
             "symbolSize": 10,
             "itemStyle": {
                 "normal": {
-                    color:'rgba(19, 173, 255, 1)',
+                    color: 'rgba(19, 173, 255, 1)',
                     "borderColor": "rgba(19, 173, 255, 0.4)",
                     "borderWidth": 10
                 }
@@ -193,15 +192,27 @@
         }]
     };
 
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

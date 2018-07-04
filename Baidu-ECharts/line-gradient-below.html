@@ -9,44 +9,38 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
+    var option = null;
 
-    values = [100,91,88,92,100,94,100,100,95,90];
+    values = [100, 91, 88, 92, 100, 94, 100, 100, 95, 90];
     option = {
+        backgroundColor: getColorFromQueryParam(),
         tooltip: {
             formatter: " {c}"
         },
-        grid:{
-            backgroundColor:'#ffffff',
-            borderWidth:0
+        grid: {
+            backgroundColor: '#ffffff',
+            borderWidth: 0
         },
         xAxis: [{
             type: 'category',
             name: '',
             boundaryGap: true,
-            data: ['商务局','司法局','统计局','审计局','农林水局','民政局','教育局','住建局','食药监','科技局'],
+            data: ['商务局', '司法局', '统计局', '审计局', '农林水局', '民政局', '教育局', '住建局', '食药监', '科技局'],
             // axisLabel: {
             //     formatter: '{value}'
             // }
 
             axisLabel: {
-                show:true,
-                interval:0,
-                formatter:function(value)
-                {
+                show: true,
+                interval: 0,
+                formatter: function (value) {
                     return value.split("").join("\n");
-                } ,
-                fontSize:'15'
+                },
+                fontSize: '15'
             },
         }],
         yAxis: {
@@ -64,7 +58,7 @@
                 //     color: '#ccc'
 
                 // },
-                show:false
+                show: false
             }
 
         },
@@ -100,15 +94,28 @@
             }
         }]
     };
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>

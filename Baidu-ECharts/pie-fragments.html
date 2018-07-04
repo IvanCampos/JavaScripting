@@ -19,10 +19,8 @@
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
     var app = {};
-    option = null;
-  <!-- add demo -->
-    option = {
-        backgroundColor: '#2c343c',
+    var option = {
+        backgroundColor: getColorFromQueryParam(),
 
         title: {
             text: '各档期电影票房统计图',
@@ -33,7 +31,7 @@
             }
         },
 
-        tooltip : {
+        tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
@@ -46,19 +44,21 @@
                 colorLightness: [0, 1]
             }
         },
-        series : [
+        series: [
             {
-                name:'各档期电影票房统计图',
-                type:'pie',
-                radius : '55%',
+                name: '各档期电影票房统计图',
+                type: 'pie',
+                radius: '55%',
                 center: ['50%', '50%'],
-                data:[
-                    {value:2049628, name:'非节假日'},
-                    {value:901890, name:'国庆档'},
-                    {value:2593124, name:'贺岁档'},
-                    {value:2487111, name:'暑期档'},
-                    {value:514688, name:'五一档'}
-                ].sort(function (a, b) { return a.value - b.value; }),
+                data: [
+                    {value: 2049628, name: '非节假日'},
+                    {value: 901890, name: '国庆档'},
+                    {value: 2593124, name: '贺岁档'},
+                    {value: 2487111, name: '暑期档'},
+                    {value: 514688, name: '五一档'}
+                ].sort(function (a, b) {
+                    return a.value - b.value;
+                }),
                 roseType: 'radius',
                 label: {
                     normal: {
@@ -93,15 +93,28 @@
             }
         ]
     };
-;
-if (option && typeof option === "object") {
-myChart.setOption(option, true);
-}
-$(window).on('resize', function(){
-	if(myChart != null && myChart != undefined){
-		myChart.resize();
-	}
-});
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#2c343c";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
 </script>
 </body>
 </html>
