@@ -138,6 +138,8 @@
             // },
             geo: {
                 show: true,
+				top: 0,
+				zoom: 0.9,
                 map: 'jiangxi',
                 label: {
                     normal: {
@@ -152,9 +154,9 @@
                     normal: {
                         areaColor: 'transparent',
                         borderColor: '#3fdaff',
-                        borderWidth: 2,
+                        borderWidth: 3,
                         shadowColor: 'rgba(63, 218, 255, 0.5)',
-                        shadowBlur: 30
+                        shadowBlur: 60
                     },
                     emphasis: {
                         areaColor: '#2B91B7',
@@ -190,8 +192,8 @@
                     type: 'map',
                     map: 'jiangxi',
                     geoIndex: 0,
-                    aspectScale: 0.75, //长宽比
-                    showLegendSymbol: false, // 存在legend时显示
+                    aspectScale: 0.65,
+                    showLegendSymbol: false,
                     label: {
                         normal: {
                             show: false
@@ -213,7 +215,7 @@
                             areaColor: '#2B91B7'
                         }
                     },
-                    animation: false,
+                    animation: true,
                     data: data
                 },
                 {
