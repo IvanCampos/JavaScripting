@@ -44,8 +44,15 @@
             type: 'value'
         },
         grid3D: {
+            top: -40,
+            viewControl: {
+                distance: 300,
+                beta: 37,
+                animationDurationUpdate: 1000,
+				autoRotate: true
+            },
             boxWidth: 200,
-            boxDepth: 80,
+            boxDepth: 100,
             light: {
                 main: {
                     intensity: 1.2
@@ -57,6 +64,7 @@
         },
         series: [{
             type: 'bar3D',
+
             data: data.map(function (item) {
                 return {
                     value: [item[1], item[0], item[2]]
@@ -89,6 +97,7 @@
             }
         }]
     };
+
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
