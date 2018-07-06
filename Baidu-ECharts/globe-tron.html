@@ -29,8 +29,8 @@
     }
 
     var canvas = document.createElement('canvas');
-    canvas.width = 4096;
-    canvas.height = 2048;
+    canvas.width = 2048;
+    canvas.height = 1024;
     context = canvas.getContext("2d");
 
     context.lineWidth = 0.5;
@@ -116,8 +116,8 @@
 
         function initCharts(opt) {
             var contourChart = echarts.init(document.createElement('canvas'), null, {
-                width: 4096,
-                height: 2048
+                width: 2048,
+                height: 1024
             });
 
             var img = new echarts.graphic.Image({
@@ -176,9 +176,11 @@
                         }
                     },
                     viewControl: {
-                        autoRotate: false
+                        distance: 300,
+                        beta: 37,
+                        animationDurationUpdate: 1000,
+                        autoRotate: true
                     },
-
                     layers: [{
                         type: 'blend',
                         blendTo: 'emission',
