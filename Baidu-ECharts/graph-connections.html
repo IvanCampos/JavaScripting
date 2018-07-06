@@ -18,7 +18,7 @@
     myChart.showLoading();
     $.get('asset/get/s/data-1490233394790-BJjN_jx2e.gexf', function (xml) {
         myChart.hideLoading();
-        console.log(xml);
+        //console.log(xml);
         var graph = echarts.dataTool.gexf.parse(xml);
         var categories = [];
         for (var i = 0; i < 9; i++) {
