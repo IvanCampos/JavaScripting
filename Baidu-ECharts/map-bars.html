@@ -57,7 +57,7 @@
                 },
                 groundPlane: {
                     show: true,
-                    color: '#E94B3C'
+                    color: getColorFromQueryParam()
                 },
                 postEffect: {
                     enable: true,
@@ -121,7 +121,7 @@
     });
 
     function getColorFromQueryParam() {
-        var color = "#000000";
+        var color = "#E94B3C";
         if (!window.location.search) return color;
 
         let params = new URLSearchParams(window.location.search);

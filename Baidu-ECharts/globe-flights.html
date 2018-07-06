@@ -33,7 +33,7 @@
         });
 
         myChart.setOption({
-            backgroundColor: '#000',
+            backgroundColor: getColorFromQueryParam(),
             globe: {
                 baseTexture: 'data-gl/asset/world.topo.bathy.200401.jpg',
                 heightTexture: 'data-gl/asset/bathymetry_bw_composite_4k.jpg',
@@ -82,7 +82,7 @@
     });
 
     function getColorFromQueryParam() {
-        var color = "#344b58";
+        var color = "#000";
         if (!window.location.search) return color;
 
         let params = new URLSearchParams(window.location.search);
