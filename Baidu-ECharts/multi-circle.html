@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+
+    data = [{
+        'name': '北京',
+        'value': 5600
+    }, {
+        'name': '上海',
+        'value': 3600
+    }, {
+        'name': '广州',
+        'value': 1500
+    }, {
+        'name': '广州',
+        'value': 2500
+    }]
+    let seriesObjs = [];
+    let r = 200;
+    let color = ['#8F99F0', '#5FC5F5', '#6DE0CF', '#00FF00'];
+    let placeHolderStyle = {
+        normal: {
+            label: {
+                show: false,
+                position: 'center'
+            },
+            labelLine: {
+                show: false
+            },
+            color: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0
+        }
+    }
+    for (let i = 0; i < data.length; i++) {
+        //            legendData.push(data[i].name)
+        let seriesObj = {
+            name: data[i].name,
+            type: 'pie',
+            clockWise: false,
+            radius: [r - 1 - i * 20, r - i * 20],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    borderWidth: 5,
+                    shadowBlur: 50,
+                    borderColor: color[i],
+                    shadowColor: 'rgba(142,152,241, 0.6)'
+                }
+                //                    emphasis: {
+                //                      borderColor: 'rgb(142,152,241)',
+                //                      shadowColor: 'rgba(142,152,241, 0.6)'
+                //                    }
+            },
+            hoverAnimation: false,
+            data: [{
+                value: data[i].value
+            }, {
+                value: data[0].value * 4 / 3 - data[i].value,
+                name: 'invisible',
+                itemStyle: placeHolderStyle
+            }]
+        }
+        seriesObjs.push(seriesObj)
+    }
+    var option = {
+        backgroundColor: getColorFromQueryParam(),
+        tooltip: {
+            show: false,
+            formatter: '{a} : {c}'
+        },
+        legend: {
+            show: false
+        },
+        toolbox: {
+            show: false
+        },
+        series: seriesObjs
+    }
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#011A2E";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>

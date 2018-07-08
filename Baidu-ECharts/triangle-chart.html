@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+
+    var lightBlue = {
+        type: 'linear',
+        x: 0,
+        y: 0,
+        x2: 0,
+        y2: 1,
+        colorStops: [{
+            offset: 0,
+            color: 'rgba(0, 192, 255, 1)'
+        }, {
+            offset: 1,
+            color: 'rgba(0, 192, 255, 0.1)'
+        }],
+        globalCoord: false
+    }
+    var darkBlue = {
+        type: 'linear',
+        x: 0,
+        y: 0,
+        x2: 0,
+        y2: 1,
+        colorStops: [{
+            offset: 0,
+            color: 'rgba(41, 121, 255, 1)'
+        }, {
+            offset: 1,
+            color: 'rgba(41, 121, 255, 0.1)'
+        }],
+        globalCoord: false
+    }
+
+    function randomData() {
+        value = Math.random() * 50;
+        return {
+            value: Math.round(value)
+        }
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    function timeSet() {
+        var newTime = new Date();
+        var m = newTime.getMinutes();
+        var s = newTime.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        return [m, s].join(':');
+    }
+
+    var data = [];
+    var timeData = [];
+
+    for (var i = 0; i < 9; i++) {
+        timeData.unshift(timeSet());
+        data.unshift(randomData());
+    }
+
+    var option = {
+        tooltip: {
+            show: false
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            // boundaryGap: 100,
+            min: -1,
+            max: 9,
+            axisLine: {
+                lineStyle: {
+                    color: '#4bbbf8',
+                    shadowColor: 'rgba(75, 211, 255, 0.5)',
+                    shadowBlur: 5
+                }
+            },
+            axisTick: {
+                interval: (index) => {
+                if (index === -1 || index === 9) {
+        return false;
+    } else {
+        return true;
+    }
+    }
+    },
+    axisLabel: {
+        color: '#fff',
+            fontSize: 12
+    },
+    splitLine: {
+        show: false
+    },
+    data: timeData,
+
+    },
+    yAxis: [{
+        max: 50,
+        min: 0,
+        axisLine: {
+            lineStyle: {
+                color: '#4bbbf8',
+                shadowColor: 'rgba(75, 211, 255, 0.5)',
+                shadowBlur: 5
+            }
+        },
+        axisLabel: {
+            color: '#fff',
+            fontSize: 12
+        },
+        splitLine: {
+            lineStyle: {
+                color: 'rgba(75, 211, 255, 0.2)',
+                type: 'dashed'
+            }
+        }
+    }],
+        series: [{
+        name: '数量',
+        type: 'pictorialBar',
+        barCategoryGap: '-60%',
+        symbol: 'path://d="M150 0 L75 200 L225 200 Z"',
+        label: {
+            show: true,
+            position: 'top',
+            color: '#1798ff',
+            fontSize: 14
+        },
+        itemStyle: {
+
+            color: function(params) {
+                return params.dataIndex % 2 ? darkBlue : lightBlue;
+            }
+        },
+        data: data
+    }],
+        backgroundColor: getColorFromQueryParam(),
+    };
+
+    myChart.setOption(option);
+    var key = 0;
+    setInterval(function() {
+
+        timeData.shift();
+        timeData.push(timeSet());
+
+        data.shift();
+        data.push(randomData());
+
+        key = (key === 1) ? 0 : 1;
+
+        myChart.setOption({
+            xAxis: {
+                data: timeData
+            },
+            series: [{
+                itemStyle: {
+                    normal: {
+                        color: function(params) {
+                            return (params.dataIndex + key) % 2 ? darkBlue : lightBlue;
+                        }
+                    }
+                },
+                data: data
+            }]
+        });
+    }, 1000);
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#190c12";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var uploadedDataURL = "asset/get/s/data-1483975567865-BJOcimZIg.json";
+
+    myChart.showLoading();
+
+    $.getJSON(uploadedDataURL, function(data) {
+
+        myChart.hideLoading();
+
+        function getAirportCoord(idx) {
+            return [data.airports[idx][3], data.airports[idx][4]];
+        }
+        //console.log(data);
+        var points = data.airports.map(function (airport) {
+            return [airport[3], airport[4]];
+        });
+
+        myChart.setOption(option = {
+            backgroundColor: getColorFromQueryParam(),
+            geo: {
+                map: 'world',
+                left: 0,
+                right: 0,
+                silent: true,
+                itemStyle: {
+                    normal: {
+                        borderColor: '#FFF',
+                        color: '#000'
+                    }
+                }
+            },
+            series: [{
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: points,
+                symbolSize: 3,
+                // large: true,
+                largeThreshold: 100,
+                itemStyle: {
+                    normal: {
+                        opacity: 0.4
+                    }
+                },
+                blendMode: 'lighter'
+            }]
+        });
+    });
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
