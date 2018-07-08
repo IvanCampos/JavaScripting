@@ -20,7 +20,6 @@
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var option = null;
 
     var hours = ['12a', '1a', '2a', '3a', '4a', '5a', '6a',
         '7a', '8a', '9a', '10a', '11a',
@@ -37,7 +36,7 @@
 		//default values used
 	});
 
-    option = {
+    var option = {
         backgroundColor: getColorFromQueryParam(),
         title: {
             text: "RECENT GITHUB ACTIVITY",
@@ -69,6 +68,12 @@
         },
         grid3D: {
             top: -40,
+			axisLabel: {
+              show: true
+			},
+            axisTick: {
+                show: false
+			},
             viewControl: {
                 distance: 300,
                 beta: 37,
