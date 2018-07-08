@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var UPDATE_DURATION = 100;
+
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+    var audioContext = new AudioContext();
+
+    var oReq = new XMLHttpRequest();
+    oReq.open('GET', 'data/asset/sound/equinoxCover.mp4', true);
+    oReq.responseType = 'arraybuffer';
+
+    oReq.onload = function (e) {
+        audioContext.decodeAudioData(oReq.response, initVisualizer);
+    };
+    oReq.send();
+
+    function initVisualizer(audioBuffer) {
+        inited = true;
+
+        var source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+
+        if (source.noteOn) {
+            source.noteOn(0);
+        }
+        else {
+            source.start(0);
+        }
+
+        var analyzer = audioContext.createAnalyser();
+        var gainNode = audioContext.createGain();
+        analyzer.fftSize = 8192;
+
+        gainNode.gain.value = 1;
+        source.connect(gainNode);
+        gainNode.connect(analyzer);
+        analyzer.connect(audioContext.destination);
+
+        var frequencyBinCount = analyzer.frequencyBinCount;
+        var dataArray = new Uint8Array(frequencyBinCount);
+
+        var beta = 0;
+
+        function update() {
+            analyzer.getByteFrequencyData(dataArray);
+
+            var item = [];
+            var size = 75;
+            var dataProvider = [];
+
+            for (var i = 0; i < size * size; i++) {
+                var x = i % size;
+                var y = Math.floor(i / size);
+                var dx = x - size / 2;
+                var dy = y - size / 2;
+
+                var angle = Math.atan2(dy, dx);
+                if (angle < 0) {
+                    angle = Math.PI * 2 + angle;
+                }
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                var idx = Math.min(
+                    frequencyBinCount - 1, Math.round(angle / Math.PI / 2 * 60 + dist * 60) + 100
+                );
+
+                var val = Math.pow(dataArray[idx] / 100, 3);
+                dataProvider.push([x, y, Math.max(val, 0.1)]);
+            }
+
+            myChart.setOption({
+                grid3D: {
+                    viewControl: {
+                        beta: beta,
+                        alpha: Math.sin(beta / 10 + 40) * (beta % 10 + 5) / 15 * 30 + 30,
+                        distance: Math.cos(beta / 50 + 20) * (beta % 10 + 5) / 15 * 50 + 80,
+                        animationDurationUpdate: UPDATE_DURATION,
+                        animationEasingUpdate: 'linear'
+                    }
+                },
+                series: [{
+                    data: dataProvider
+                }]
+            });
+            beta += 2;
+
+            setTimeout(update, UPDATE_DURATION);
+        };
+
+        update();
+    }
+
+    var option = {
+        tooltip: {},
+        visualMap: {
+            show: false,
+            min: 0.1,
+            max: 4,
+            inRange: {
+                color: ['#000000', '#073c45', '#18cae6', '#b9eff7', '#fff']
+            }
+        },
+        xAxis3D: {
+            type: 'value'
+        },
+        yAxis3D: {
+            type: 'value'
+        },
+        zAxis3D: {
+            type: 'value',
+            min: -10,
+            max: 10
+        },
+        grid3D: {
+            show: false,
+            environment: getColorFromQueryParam(),
+            viewControl: {
+                distance: 100
+            },
+            postEffect: {
+                enable: true,
+                FXAA: {
+                    enable: true
+                }
+            },
+            light: {
+                main: {
+                    shadow: true,
+                    intensity: 10,
+                    quality: 'high'
+                },
+                ambientCubemap: {
+                    texture: 'data-gl/asset/canyon.hdr',
+                    exposure: 0,
+                    diffuseIntensity: 0.3
+                }
+            }
+        },
+        series: [{
+            type: 'bar3D',
+            silent: true,
+            shading: 'lambert',
+            data: [],
+            barSize: 1,
+            lineStyle: {
+                width: 7
+            },
+            animationDurationUpdate: UPDATE_DURATION
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
