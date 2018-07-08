@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+
+    var config = {
+        color: '#18CAE6',
+        levels: 1,
+        intensity: 2,
+        threshold: 0.01
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 1024;
+    context = canvas.getContext("2d");
+
+    context.lineWidth = 0.5;
+    context.strokeStyle = config.color;
+    context.fillStyle = config.color;
+    context.shadowColor = config.color;
+
+    $.when(
+        $.getScript('./dist/vendors/d3/d3-contour.js'),
+        $.getScript('./dist/vendors/d3/d3-geo.js'),
+        $.getScript('./dist/vendors/d3/d3-timer.js')
+    ).done(function () {
+
+        image('data-gl/asset/bathymetry_bw_composite_4k.jpg').then(function(image) {
+            var m = image.height,
+                n = image.width,
+                values = new Array(n * m),
+                contours = d3.contours().size([n, m]).smooth(true),
+                projection = d3.geoIdentity().scale(canvas.width / n),
+                path = d3.geoPath(projection, context);
+
+            //   StackBlur.R(image, 5);
+
+            for (var j = 0, k = 0; j < m; ++j) {
+                for (var i = 0; i < n; ++i, ++k) {
+                    values[k] = image.data[(k << 2)] / 255;
+                }
+            }
+
+            var opt = {
+                image: canvas
+            }
+
+            var results = [];
+            function update(threshold, levels) {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                var thresholds = [];
+                for (var i = 0; i < levels; i++) {
+                    thresholds.push((threshold + 1 / levels * i) % 1);
+                }
+                results = contours.thresholds(thresholds)(values);
+                redraw();
+            }
+
+            function redraw() {
+                results.forEach(function (d, idx) {
+                    context.beginPath();
+                    path(d);
+                    context.globalAlpha = 1;
+                    context.stroke();
+                    if (idx > config.levels / 5 * 3) {
+                        context.globalAlpha = 0.01;
+                        context.fill();
+                    }
+                });
+                opt.onupdate();
+            }
+            d3.timer(function(t) {
+                var threshold = (t % 10000) / 10000;
+                update(threshold, 1);
+            });
+
+            initCharts(opt);
+
+            update(config.threshold, config.levels);
+
+        });
+
+        function image(url) {
+            return new Promise(function(resolve) {
+                var image = new Image();
+                image.src = url;
+                image.onload = function() {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = image.width / 8;
+                    canvas.height = image.height / 8;
+                    var context = canvas.getContext("2d");
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    resolve(context.getImageData(0, 0, canvas.width, canvas.height));
+                };
+            });
+        }
+
+        function initCharts(opt) {
+            var contourChart = echarts.init(document.createElement('canvas'), null, {
+                width: 2048,
+                height: 1024
+            });
+
+            var img = new echarts.graphic.Image({
+                style: {
+                    image: opt.image,
+                    x: -1,
+                    y: -1,
+                    width: opt.image.width + 2,
+                    height: opt.image.height + 2
+                }
+            });
+            contourChart.getZr().add(img);
+
+            opt.onupdate = function () {
+                img.dirty();
+            };
+
+            myChart.setOption({
+                backgroundColor: getColorFromQueryParam(),
+                globe: {
+
+                    environment: 'data-gl/asset/black.png',
+
+                    baseTexture: 'data-gl/asset/earth.jpg',
+                    heightTexture: 'data-gl/asset/bathymetry_bw_composite_4k.jpg',
+
+                    displacementScale: 0.1,
+                    displacementQuality: 'high',
+
+                    baseColor: '#000',
+
+                    shading: 'realistic',
+                    realisticMaterial: {
+                        roughness: 0.2,
+                        metalness: 0
+                    },
+
+                    postEffect: {
+                        enable: true,
+                        depthOfField: {
+                            enable: false
+                        }
+                    },
+                    light: {
+                        ambient: {
+                            intensity: 0.1
+                        },
+                        main: {
+                            intensity: 0.1,
+                            shadow: false
+                        },
+                        ambientCubemap: {
+                            texture: 'data-gl/asset/lake.hdr',
+                            exposure: 1,
+                            diffuseIntensity: 0.5,
+                            specularIntensity: 2
+                        }
+                    },
+                    viewControl: {
+                        distance: 300,
+                        beta: 37,
+                        animationDurationUpdate: 1000,
+                        autoRotate: true
+                    },
+                    layers: [{
+                        type: 'blend',
+                        blendTo: 'emission',
+                        texture: 'data-gl/asset/night.jpg',
+                        intensity: config.intensity
+                    }, {
+                        type: 'overlay',
+                        texture: 'data-gl/asset/clouds.png',
+                        shading: 'lambert',
+                        distance: 10
+                    }]
+                }
+            });
+        }
+    });
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
