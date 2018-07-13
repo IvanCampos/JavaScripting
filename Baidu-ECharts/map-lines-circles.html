@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+// --------------可动态获取的外置参数------------------------——
+    var title = '流向地图模板'
+    var ZOOM = 12 //地图默认放大
+    var isEffect = true //是否要飞机动效
+    var lineWidth = 2  //线条宽度
+    var pointSymbolSize = 15 //中心店黑色小球大小
+    //中心点
+    var point = [{
+        "name": "中心点",
+        "value": ["116.347274", "39.853929", 507]
+    }]
+    //红色线条
+    var targetInPoint = [{
+        "name": "某地址四",
+        "value": ["116.3645884604655", "39.91066", "248"]
+    }, {
+        "name": "某地址五",
+        "value": ["116.27913894184664", "39.9372266", "163"]
+    }, {
+        "name": "某地址六",
+        "value": ["116.46935206137962", "39.97451362496428", "96"]
+    }]
+
+    //蓝色线条
+    var targetOutPoint = [{
+        "name": "某地址一\n\n",
+        "value": ["116.3944375", "39.90018", "44"]
+    }, {
+        "name": "\n\t某地址二\n\t很长",
+        "value": ["116.5273732", "39.92266423", "43"]
+    }, {
+        "name":"某地址三",
+        "value": ["116.2543042", "39.90391277", "37"]
+    }]
+
+    //飞机路径
+    var planePath ='path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+    // --------------可动态获取的外置参数/end------------------------——
+
+
+    var inPoint = []
+    var outPoint = []
+    targetInPoint.forEach((item, index) => {
+        targetInPoint[index]['tag'] = 'in'
+        inPoint.push({
+        name: point[0].name,
+        toname: item.name,
+        coords: [point[0].value.slice(0, 2), item.value.slice(0, 2)],
+    })
+    })
+    targetOutPoint.forEach((item, index) => {
+        targetOutPoint[index]['tag'] = 'out'
+        outPoint.push({
+        name: point[0].name,
+        toname: item.name,
+        coords: [point[0].value.slice(0, 2), item.value.slice(0, 2)],
+    })
+    })
+    var targetPoint = [...targetInPoint, ...targetOutPoint]
+
+
+    function getSeries() {
+        var arr = [{
+            type: 'lines',
+            mapType: 'china',
+            coordinateSystem: 'bmap',
+            zlevel: 10,
+            data: outPoint,
+            //线上面的动态特效
+            effect: {
+                show: isEffect,
+                period: 6,
+                trailLength: 0,
+                symbol: planePath,
+                symbolSize: 15
+            },
+            lineStyle: {
+                normal: {
+                    width: lineWidth,
+                    color: '#5170A2',
+                    curveness: 0.2,
+                }
+            }
+        }, {
+            type: 'lines',
+            mapType: 'china',
+            coordinateSystem: 'bmap',
+            zlevel: 10,
+            data: inPoint,
+            effect: {
+                show: isEffect,
+                period: 6,
+                trailLength: 0,
+                symbol: planePath,
+                symbolSize: 15
+            },
+            lineStyle: {
+                normal: {
+                    width: lineWidth,
+                    color: '#D07070',
+                    curveness: 0.3,
+                }
+            }
+        }, {
+            type: 'effectScatter',
+            mapType: 'china',
+            coordinateSystem: 'bmap',
+            zlevel: 10,
+            // symbolSize: 6,
+            symbolSize: function(value) {
+                var v = value && value[2]  //可自动以更改
+                var size = parseInt(v) / 4
+                if (size >= 20) return 20
+                if (size <= 2) return 2
+                return size
+                // return 20
+            },
+            label: {
+                normal: {
+                    show: true,
+                    fontWeight: 300,
+                    position: 'right',
+                    formatter: ' {b}',
+                    textStyle: {
+                        fontFamily: '宋体', //字体样式可改
+                    },
+                    // color:function(value){
+                    //   console.log(value)
+                    // }
+                    // color:'yellow'
+                }
+            },
+            rippleEffect: {
+                period: 8,
+                scale: 2,
+                brushType: 'stroke',
+            },
+            showEffectOn: 'render',
+            itemStyle: {
+                normal: {
+                    textStyle: {
+                        fontWeight: 700,
+                        fontStyle: 'italic',
+                        fontSize: '17',
+                        fontFamily: 'cursive',
+                    },
+                    color: function(value) {
+                        switch (value.data.tag) {
+                            case 'in':  //可调整颜色
+                                return '#D07070'
+                                break;
+                            case 'out': //可调整颜色
+                                return '#5170A2'
+                                break;
+                            default:
+
+                        }
+                    },
+                }
+            },
+            data: targetPoint,
+            // data: convertData(houseData),
+        },
+            {
+                type: 'effectScatter',
+                mapType: 'china',
+                coordinateSystem: 'bmap',
+                zlevel: 10,
+                symbolSize: pointSymbolSize,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}',
+                        textStyle: {
+                            fontWeight: 600,
+                            fontSize: '16',
+                            fontFamily: '宋体',
+                        },
+                    }
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    period: 8,
+                    scale: 2,
+                    brushType: 'stroke',
+                },
+
+                itemStyle: {
+                    normal: {
+                        color: '#414957',
+                    },
+                    //shadowBlur: 10,
+                },
+                // data: convertData(schoolData),
+                data: point,
+            },
+        ]
+        return arr
+    }
+    option = {
+        title:{
+            text:title
+        },
+        bmap: {
+            center: point[0].value.slice(0, 2),
+            zoom: 12,
+            roam: true,
+            //地图样式的调整
+            mapStyle: {
+                styleJson: [{
+                    "featureType": "all",
+                    "elementType": "all",
+                    "stylers": {
+                        "lightness": 47,
+                        "saturation": -100
+                    }
+                },
+                    {
+                        "featureType": "highway",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }, {
+                        "featureType": "local",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }, {
+                        "featureType": "poi",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }, {
+                        "featureType": "arterial",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }, {
+                        "featureType": "label",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "on"
+                        }
+                    }
+                ]
+            }
+        },
+        // legend: {
+        //     orient: 'horizontal',
+        //     top: 10,
+        //     icon: 'circle',
+        //     itemWidth: 6,
+        //     itemHeight: 6,
+        //     itemGap: 6,
+        //     borderRadius: 6,
+        //     data: ['网外', '网内']
+        // },
+        series: getSeries()
+    }
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#344b58";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
