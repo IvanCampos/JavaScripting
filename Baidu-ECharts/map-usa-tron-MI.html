@@ -21,10 +21,12 @@
     var option = null;
 
     var data = [
-        {name: 'Boston', value: 10}
+        {name: 'Boston', value: 10},
+        {name: 'Test', value: 100}
     ];
     var geoCoordMap = {
-        'Boston':[-71.0589, 42.3601]
+        'Boston':[-71.0589, 42.3601],
+        'Test':[-71.328292,41.781632]
     };
 
     var convertData = function (data) {
@@ -92,9 +94,10 @@
             map: 'USA',
             show: true,
             roam: true,
-            label: {
+			label: {
                 emphasis: {
-                    show: false
+                    color: '#FFF',
+                    show: true
                 }
             },
             itemStyle: {
@@ -111,7 +114,7 @@
                 type: 'scatter',
                 map: 'USA',
                 geoIndex: 1,
-                aspectScale: 0.75,
+				aspectScale: 0.75,
                 showLegendSymbol: false,
                 label: {
                     normal: {
@@ -135,7 +138,7 @@
                         areaColor: '#0f2c70'
                     }
                 },
-                data:[]
+                data: convertData(data)
             }
         ]
     });
@@ -150,7 +153,7 @@
     });
 
     function getColorFromQueryParam() {
-        var color = "#344b58";
+        var color = "#000";
         if (!window.location.search) return color;
 
         let params = new URLSearchParams(window.location.search);
