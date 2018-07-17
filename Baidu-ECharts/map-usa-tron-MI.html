@@ -21,12 +21,12 @@
     var option = null;
 
     var data = [
-        {name: 'Boston', value: 10},
-        {name: 'Test', value: 100}
+        {name: 'Boston', value: 100},
+		{name: 'Bridgeport', value: 100}
     ];
     var geoCoordMap = {
         'Boston':[-71.0589, 42.3601],
-        'Test':[-71.328292,41.781632]
+        'Bridgeport':[-73.1894, 41.1792]
     };
 
     var convertData = function (data) {
@@ -97,7 +97,7 @@
 			label: {
                 emphasis: {
                     color: '#FFF',
-                    show: true
+					show: true
                 }
             },
             itemStyle: {
@@ -111,34 +111,28 @@
         },
         series: [
             {
-                type: 'scatter',
-                map: 'USA',
-                geoIndex: 1,
-				aspectScale: 0.75,
-                showLegendSymbol: false,
+                name: 'epiCenters',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: function (val) {
+                    return val[2] / 10;
+                },
                 label: {
                     normal: {
-                        show: false,
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
                     },
                     emphasis: {
-                        show: false,
-                        textStyle: {
-                            color: '#fff'
-                        }
+                        show: true
                     }
                 },
-                roam: true,
                 itemStyle: {
                     normal: {
-                        areaColor: '#031525',
-                        borderColor: '#3B5077',
-                        borderWidth: 1
-                    },
-                    emphasis: {
-                        areaColor: '#0f2c70'
+                        color: 'white'
                     }
-                },
-                data: convertData(data)
+                }
             }
         ]
     });
