@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var chinaContourUrl = "asset/get/s/data-1469097271266-SkyrH7CP.json";
+
+    $.getJSON(chinaContourUrl, function (json) {
+        echarts.registerMap('china-contour', json);
+
+        myChart.setOption({
+            geo: [{
+                map: 'china',
+                itemStyle: {
+                    normal: {
+                        borderWidth: 2,
+                        shadowBlur: 90,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)'
+                    }
+                }
+            }, {
+                map: 'china',
+                itemStyle: {
+                    normal: {
+                        borderColor: '#aaa'
+                    }
+                }
+            }]
+        });
+    });
+    var geoCoordMap = {
+        "重庆金佛山国家级自然保护区":[122.159108,47.951313],
+    };
+
+    var convertData = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var geoCoord = geoCoordMap[data[i].name];
+            if (geoCoord) {
+                res.push(geoCoord.concat(data[i].value));
+            }
+        }
+        return res;
+    };
+
+    option = {
+        title: {
+            text: '重楼标本热力分布',
+            subtext: 'data from NSII',
+            sublink: 'http://www.nsii.org.cn/2017',
+            left: 'center',
+        },
+        visualMap: {
+            min: 0,
+            max: 10,
+            splitNumber: 5,
+            inRange: {
+                color: ['#d94e5d','#eac736','#50a3ba'].reverse()
+            },
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        geo: {
+            map: 'china',
+        },
+        series: [{
+            name: 'AQI',
+            type: 'heatmap',
+            coordinateSystem: 'geo',
+            data: convertData([
+                {name: "重庆金佛山国家级自然保护区", value: 144},
+            ])
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>

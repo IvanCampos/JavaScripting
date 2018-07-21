@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    let canvas = document.createElement('canvas');
+    let mapChart = echarts.init(canvas, null, {
+        width: 4096,
+        height: 2048
+    });
+    mapChart.setOption({
+        series: [{
+            type: 'map',
+            map: 'world',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            boundingCoords: [
+                [-180, 90],
+                [180, -90]
+            ]
+        }]
+    });
+    option = {
+        title: {
+            text: '点击地球获取该区域地图',
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        backgroundColor: '#333',
+        tooltip: {
+            show: true
+        },
+        visualMap: [{
+            // show: false,
+            type: 'continuous',
+            seriesIndex: 0,
+            text: ['scatter3D'],
+            textStyle: {
+                color: '#fff'
+            },
+            calculable: true,
+            max: 3000,
+            inRange: {
+                color: ['#87aa66', '#eba438', '#d94d4c']
+            }
+        }],
+        globe: {
+            baseTexture: mapChart,
+            // shading: 'lambert',
+            light: {
+                main: {
+                    color: '#fff',
+                    intensity: 1.2,
+                    // shadowQuality: 'high',
+                    shadow: false,
+                    alpha: 40,
+                    beta: -30
+                },
+                ambient: {
+                    intensity: 0.5
+                }
+            },
+            viewControl: {
+                alpha: 30,
+                beta: 160,
+                // targetCoord: [116.46, 39.92],
+                autoRotate: true,
+                autoRotateAfterStill: 10,
+                distance: 240
+            }
+        },
+        series: [{
+            name: 'lines3D',
+            type: 'lines3D',
+            coordinateSystem: 'globe',
+            effect: {
+                show: true
+            },
+            blendMode: 'lighter',
+            lineStyle: {
+                width: 2
+            },
+            data: [],
+            silent: false
+        }]
+    }
+    // 随机数据
+    for (let i = 0; i < 500; i++) {
+        option.series[0].data = option.series[0].data.concat(rodamData())
+    }
+
+    function rodamData() {
+        let name = '随机点' + Math.random().toFixed(5) * 100000
+        // let longitude = Math.random() * 62 + 73
+        let longitude = 105.18
+        let longitude2 = Math.random() * 360 - 180
+        // let latitude = Math.random() * 50 + 3.52
+        let latitude = 37.51
+        let latitude2 = Math.random() * 180 - 90
+        return {
+            coords: [
+                [longitude2, latitude2],
+                [longitude, latitude]
+            ],
+            value: (Math.random() * 3000).toFixed(2)
+        }
+    }
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>

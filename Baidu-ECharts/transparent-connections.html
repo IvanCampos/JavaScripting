@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%">
+</div>
+<div id="chart-panel"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var dom = document.getElementById('chart-panel');
+    dom.style.width = 780 + 'px';
+    dom.style.height = 600 + 'px';
+    option = {
+        tooltip: {
+            show: false
+        },
+        legend: {
+            x: "center",
+            data: ["家人", "朋友"]
+        },
+        animation: false,
+        series: [{
+            categories: [{
+                name: '家人',
+                itemStyle: {
+                    normal: {
+                        color: "#009800",
+                    }
+                }
+            }, {
+                name: '朋友',
+                itemStyle: {
+                    normal: {
+                        color: "#4592FF",
+                    }
+                }
+            }],
+            type: 'graph',
+            layout: 'force',
+            symbol: "circle",
+            symbolSize: 50,
+            roam: true,
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [0, 10],
+            focusNodeAdjacency: true,
+            edgeLabel: {
+                normal: {
+                    show: true,
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    formatter: "{c}"
+                }
+            },
+            categories: [{
+                name: '家人',
+                itemStyle: {
+                    normal: {
+                        color: "#009800",
+                    }
+                }
+            }, {
+                name: '朋友',
+                itemStyle: {
+                    normal: {
+                        color: "#4592FF",
+                    }
+                }
+            }],
+            lineStyle: {
+                normal: {
+                    opacity: 1,
+                    width: 2,
+                    curveness: 0
+                }
+            },
+            // 圆圈内的文字
+            label: {
+                normal: {
+                    show: true
+                }
+            },
+            force: {
+                repulsion: 5000
+            },
+            data: [{
+                name: '节点1',
+                symbol: 'image://https://cilp-art.net/wp-content/uploads/2018/04/clipart-without-white-background-apple-logo-black-png-transparent.jpg',
+                itemStyle: {
+                    normal: {
+                        color: '#f90',
+                        label: {
+                            position: 'bottom',
+                            textStyle: {
+                                color: '#f90'
+                            }
+                        }
+                    }
+                },
+
+            }, {
+                name: '节点2',
+                category: 1,
+                itemStyle: {
+                    normal: {
+                        color: '#090',
+                    },
+                    emphasis: {
+                        color: "#000"
+                    }
+                }
+            }, {
+                name: '节点3',
+                category: 1,
+                draggable: true,
+            }, {
+                name: '节点4',
+                category: 0,
+                draggable: true,
+            }, {
+                name: '节点5',
+                category: 0,
+                draggable: true,
+            }, {
+                name: '节点6',
+                category: 0,
+                draggable: true,
+            }],
+            links: [{
+                source: '节点1',
+                target: '节点2',
+                value: "朋友",
+                lineStyle: {
+                    normal: {
+                        color: '#38f',
+                        curveness: 0
+                    }
+                },
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#07ac72'
+                        }
+                    }
+                }
+            }, {
+                source: '节点1',
+                target: '节点3',
+                value: "朋友"
+            }, {
+                source: '节点1',
+                target: '节点4',
+                value: "家人"
+            }, {
+                source: '节点1',
+                target: '节点5',
+                value: "家人"
+            }, {
+                source: '节点1',
+                target: '节点6',
+                value: "家人"
+            }, ]
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
