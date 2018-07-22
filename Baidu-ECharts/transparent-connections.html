@@ -11,21 +11,15 @@
 <script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
 <script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
-    var option = null;
 
     var dom = document.getElementById('chart-panel');
     dom.style.width = 780 + 'px';
     dom.style.height = 600 + 'px';
-    option = {
+    var option = {
         tooltip: {
             show: false
         },
@@ -89,17 +83,16 @@
                     curveness: 0
                 }
             },
-            // 圆圈内的文字
             label: {
                 normal: {
-                    show: true
+                    show: false
                 }
             },
             force: {
                 repulsion: 5000
             },
             data: [{
-                name: '节点1',
+                name: '1',
                 symbol: 'image://https://cilp-art.net/wp-content/uploads/2018/04/clipart-without-white-background-apple-logo-black-png-transparent.jpg',
                 itemStyle: {
                     normal: {
@@ -114,7 +107,8 @@
                 },
 
             }, {
-                name: '节点2',
+                name: '2',
+                symbol: 'image://https://www.spreadshirt.com/image-server/v1/mp/designs/1011551983,width=178,height=178/hanka-robotics.png',
                 category: 1,
                 itemStyle: {
                     normal: {
@@ -142,8 +136,8 @@
                 draggable: true,
             }],
             links: [{
-                source: '节点1',
-                target: '节点2',
+                source: '1',
+                target: '2',
                 value: "朋友",
                 lineStyle: {
                     normal: {
@@ -159,19 +153,19 @@
                     }
                 }
             }, {
-                source: '节点1',
+                source: '1',
                 target: '节点3',
                 value: "朋友"
             }, {
-                source: '节点1',
+                source: '1',
                 target: '节点4',
                 value: "家人"
             }, {
-                source: '节点1',
+                source: '1',
                 target: '节点5',
                 value: "家人"
             }, {
-                source: '节点1',
+                source: '1',
                 target: '节点6',
                 value: "家人"
             }, ]
