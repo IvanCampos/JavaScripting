@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    let canvas = document.createElement('canvas');
+    let canvas2 = document.createElement('canvas');
+    let mapChart = echarts.init(canvas, null, {
+        width: 2048,
+        height: 1024
+    });
+    let mapHeightChart = echarts.init(canvas2, null, {
+        width: 2048,
+        height: 1024
+    })
+    mapChart.setOption({
+        backgroundColor: 'transparent',
+        series: [{
+            type: 'map',
+            map: 'china',
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            boundingCoords: [
+                [-180, 90],
+                [180, -90]
+            ],
+            label: {
+                normal: {
+                    show: false,
+                    fontSize: 4,
+                    lineHeigh: 4,
+                    color: '#000',
+
+                }
+            },
+            itemStyle: {
+                normal: {
+                    areaColor: 'transparent',
+                    borderWidth: 1,
+
+                    borderType: 'solid',
+                    borderColor: '#a85000'
+                }
+            },
+
+        }]
+    });
+    option = {
+        backgroundColor: getColorFromQueryParam(),
+        globe: {
+            globeRadius: 100,
+            baseTexture: 'asset/get/s/data-1491890179041-Hkj-elqpe.jpg',
+            silent: true,
+            environment: 'asset/get/s/data-1499132777213-SyZdmO_4-.jpg',
+
+            displacementQuality: 'ultra',
+            shading: 'realistic',
+            light: {
+                main: {
+                    shadow: true,
+                    intensity: 1
+                },
+                ambient: {
+                    intensity: 0
+                },
+                ambientCubemap: {
+                    texture: 'data-gl/asset/lake.hdr',
+                    diffuseIntensity: 1
+                }
+            },
+            viewControl: {
+                autoRotate: true,
+                targetCoord: [116.46, 39.92]
+            },
+            postEffect: {
+                enable: true,
+                SSAO: {
+                    enable: true,
+                    radius: 10
+                }
+            },
+            layers: [{
+                type: 'overlay',
+                show: true,
+                texture: mapChart,
+                distance: 0
+            }]
+        },
+        series: [{
+            type: 'lines3D',
+            effect: {
+                show: true,
+                period: 1,
+                trailWidth: 5,
+                trailLength: 2,
+                trailOpacity: 1,
+                trailColor: '#0ff420'
+            },
+            lineStyle: {
+                width: 1,
+                color: '#f4281a',
+                opacity: 1
+            },
+            blendMode: 'lighter',
+            data: [{
+                coords: [
+                    [10, 46, 10],
+                    [100, 46, 10]
+                ],
+                value: 10,
+                name: 'foo',
+            },
+                {
+                    coords: [
+                        [20, 56, 20],
+                        [120, 56, 20]
+                    ],
+                    value: 10,
+                    name: 'foo',
+                },
+                {
+                    coords: [
+                        [30, 66, 30],
+                        [140, 66, 30]
+                    ],
+                    value: 10,
+                    name: 'foo',
+                }
+            ]
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
