@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    function setCatData(arr, n, sm) {
+        for (var i = 0; i < arr.length; i++) {
+            listdata.push({
+                "name": arr[i],
+                "symbolSize": sm || 5,
+                "category": n,
+                "label": {
+                    "normal": {
+                        //   "show": true,
+                        "textStyle": {
+                            "color": colors[n]
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    function setLinkData(arr, title) {
+        for (var i = 0; i < arr.length; i++) {
+            links.push({
+                "source": arr[i],
+                "target": title
+            })
+        }
+    }
+    var legendes = ["基本数据", "税收数据", "欠税信息", "行政处罚信息", "重大违法信息", "增值税申报信息", "缴税情况", "税务信用评级", "所得税年度汇算清缴", "企业画像"];
+    var colors = ['#72d3f9', '#4185f7', '#62abe1', '#3060ba', '#0057a6', '#00a3d0', '#03a7dc', '#16dcdc', '#2976b2', '#2976b2'];
+
+    var texts = [];
+    for (var i = 0; i < legendes.length; i++) {
+        texts.push({
+            "name": legendes[i],
+            "itemStyle": {
+                "normal": {
+                    "color": colors[i],
+                    //   "borderWidth": 30,
+                    "shadowBlur": 15,
+                    "shadowColor": colors[i],
+                    //   color: '#66ff00',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 6
+                }
+            }
+        })
+    }
+    var listdata = [];
+    var cat1 = ["基本数据", "企业名称", "社会统一信用代码", "生产经营地址", "纳税人状态", "登记日期", "生产经营地址（共管户国税为准）", "法定代表人", "行业类型", "纳税人类型", "国地最早开业（设立）日期", "登记注册类型（共管户国税为准）", "纳税人登记状态（共管户国税为准）", "增值税最早申报日期", "营业税最早申报日期"];
+    var cat2 = ["税收数据", "所属日期起", "所属日期止", "应税销售收入", "入库税额", "入库税额（消）", "入库税额（营）", "入库税额（企）", "减免税额（增）", "减免税额（消）", "减免税额（营）", "减免税额（企）"];
+    var cat3 = ["欠税信息", "经营地点", "增值税欠税金额", "消费税欠税金额", "所得税欠税金额"];
+    var cat4 = ["行政处罚信息", "案件名称", "行政处罚类别", "行政处罚结果", "行政处罚事由", "行政处罚依据", "处罚金额", "行政处罚日期", "处罚截止日期", "处罚机关", "当前状态"];
+    var cat5 = ["重大违法信息", "中介机构", "从业人员", "案件性质", "主要违法事实", "处罚情况"];
+    var cat6 = ["增值税申报信息", "增值税申报信息-年度", "申报月份", "按适用税率计税销售额", "应补退税额", "按简易办法计税销售额", "免、抵、退办法出口销售额", "免税销售额"];
+    var cat7 = ["缴税情况", "缴税情况-年度", "属期起止", "税种代码", "税款种类", "实缴时间", "实缴税额"];
+    var cat8 = ["税务信用评级", "信用级别", "信用评级年度", "信用评分分数"]
+    var cat9 = ["所得税年度汇算清缴", "所得税年度汇算清缴-年度", "汇算清缴日期", "营业收入", "应纳税所得额", "应纳所得税额"];
+    var cat10 = ["企业"];
+
+    // 拼装数据
+    setCatData(cat1, 0)
+    setCatData(cat2, 1)
+    setCatData(cat3, 2)
+    setCatData(cat4, 3)
+    setCatData(cat5, 4)
+    setCatData(cat6, 5)
+    setCatData(cat7, 6)
+    setCatData(cat8, 7)
+    setCatData(cat9, 8)
+    setCatData(cat10, 9, 10)
+    var links = [];
+
+    setLinkData(cat1, "基本数据");
+    setLinkData(cat2, "税收数据");
+    setLinkData(cat3, "欠税信息");
+    setLinkData(cat4, "行政处罚信息");
+    setLinkData(cat5, "重大违法信息");
+    setLinkData(cat6, "增值税申报信息");
+    setLinkData(cat7, "缴税情况");
+    setLinkData(cat8, "税务信用评级");
+    setLinkData(cat9, "所得税年度汇算清缴");
+    setLinkData(legendes, "企业");
+
+    var planePath = 'circle';
+    var option = {
+        backgroundColor: getColorFromQueryParam(),
+        legend: {
+            data: legendes,
+            textStyle: {
+                color: '#fff'
+            },
+            icon: 'circle',
+            type: 'scroll',
+            orient: 'vertical',
+            left: 10,
+            top: 20,
+            bottom: 20,
+            itemWidth: 10,
+            itemHeight: 10
+
+            // width:5,
+            // height:5,
+            // borderWidth:1,
+            // barBorderRadius:10
+        },
+        tooltip: {
+            formatter: function(parmes) {
+                if (parmes.data.name) {
+                    return legendes[parmes.data.category] + ">" + parmes.name;
+                }
+            }
+        },
+        animationDurationUpdate: 300,
+        animationEasingUpdate: 'quinticInOut',
+        series: [{
+            type: 'graph',
+            layout: 'force',
+            symbol: planePath,
+            symbolSize: 5,
+            roam: true,
+            //   focusNodeAdjacency: false,
+            focusNodeAdjacency: true,
+            legendHoverLink: true,
+            draggable: true,
+            force: {
+                repulsion: 30,
+                gravity: 0.03,
+                edgeLength: 50,
+                layoutAnimation: true
+            },
+            categories: texts,
+            data: listdata,
+            links: links
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        // var color = "#000";
+        // if (!window.location.search) return color;
+		//
+        // let params = new URLSearchParams(window.location.search);
+		//
+        // for (let p of params) {
+        //     color = "#" + p[1];
+        // }
+		var color = new echarts.graphic.RadialGradient(0.4, 0.4, 0.7, [{
+            offset: 0,
+            color: '#162436'
+        }, {
+            offset: 1,
+            color: '#000'
+        }]);
+        return color;
+    }
+</script>
+</body>
+</html>
