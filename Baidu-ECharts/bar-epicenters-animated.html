@@ -19,7 +19,7 @@
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
     var option = null;
-
+	
     var uploadedDataURL = "asset/get/s/data-1524654308716-HJ6JZkAhM.json";
 
     var colors = [
@@ -48,7 +48,6 @@
         var year = ["2016", "2017", "2018"];
         var mapData = [[],[],[]];
 
-        /*柱子Y名称*/
         var categoryData = [];
         var barData = [];
         for (var key in geoCoordMap) {
@@ -172,7 +171,7 @@
             };
             for (var n = 0; n < year.length; n++) {
                 optionXyMap01.options.push({
-                    backgroundColor: getColorFromQueryParam(),
+                    backgroundColor: '#000',
                     title: [{
                         /* text: '地图',
                          subtext: '内部数据请勿外传',
