@@ -82,6 +82,18 @@
 			z-index: 2;
 			height: 100vh;
 		}
+		@media screen and (orientation:portrait)
+		{
+			iframe {
+				height: 0px;
+				width: 0px;
+				src: url("");
+			}
+			body {
+				background-image: none;
+				background-color: black;
+			}
+		}
 	</style>
 </head>
 <body>
@@ -92,6 +104,7 @@
 </div>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script>
+
     var BASE_URL = "https://ivancampos.github.io/JavaScripting/Baidu-ECharts/";
     $.get("https://api.github.com/repos/ivancampos/JavaScripting/contents/Baidu-ECharts", function (data) {
         for (var i = 0; i < data.length; i++) {
