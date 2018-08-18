@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+
+    var option = {
+        title: {
+            text: 'Chart with Arrows',
+        },
+        tooltip: {},
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [{
+            type: 'graph',
+            layout: 'none',
+            symbolSize: 50,
+            roam: true,
+            focusNodeAdjacency: true,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    fontSize: 20
+                }
+            },
+
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [1, 10],
+            edgeLabel: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    textStyle: {
+                        fontSize: 20
+                    }
+                }
+            },
+
+            data: [{
+                id: 'p1',
+                name: '基站、小区异常清单',
+                ip: '10.108.50.101',
+                isnode: true,
+                x: 50,
+                y: 300,
+                // symbol:'image://服务器-20.png',
+            }, {
+                id: 'p2',
+                name: '网络异常区域清单（聚合）',
+                ip: '10.108.50.101',
+                isnode: true,
+                x: 200,
+                y: 300,
+
+            },
+                {
+                    id: 'p4',
+                    name: '故障、投诉工单（历史+新增）',
+                    ip: '10.108.50.102',
+                    isnode: true,
+                    x: 200,
+                    y: 400,
+
+                },
+                {
+                    id: 'p6',
+                    name: '网络异常监控预警',
+                    ip: '10.108.50.104',
+                    isnode: true,
+                    x: 500,
+                    y: 300,
+
+                },
+                {
+                    id: 'p3',
+                    name: '小区业务量（流量、话务量、用户数）',
+                    ip: '10.108.50.106',
+                    isnode: true,
+                    x: 200,
+                    y: 200,
+
+                },
+                {
+                    id: 'p5',
+                    name: '网络异常事件',
+                    ip: '10.108.50.107',
+                    isnode: true,
+                    x: 350,
+                    y: 300,
+
+                },
+
+            ],
+
+            links: [{
+                source: 'p1',
+                target: 'p2',
+                islink: true,
+                name: '根据物理站点进行汇聚',
+                label: {
+                    normal: {
+                        fontSize: 15,
+                        formatter: function(params, ticket, callback) {
+                            params.name = params.data.name;
+                            return params.name;
+                        },
+                        show: true
+                    }
+                },
+            },
+                {
+                    source: 'p2',
+                    target: 'p5',
+                    islink: true,
+                    name: 'i*∑f1(x)',
+                    label: {
+                        normal: {
+                            fontSize: 15,
+                            formatter: function(params, ticket, callback) {
+                                params.name = params.data.name;
+                                return params.name;
+                            },
+                            show: true
+                        }
+                    },
+
+                }, {
+                    source: 'p3',
+                    target: 'p5',
+                    islink: true,
+                    name: 'k*∑f2(x)',
+                    label: {
+                        normal: {
+                            fontSize: 15,
+                            formatter: function(params, ticket, callback) {
+                                params.name = params.data.name;
+                                return params.name;
+                            },
+                            show: true
+                        }
+                    },
+                }, {
+                    source: 'p4',
+                    target: 'p5',
+                    islink: true,
+                    name: 'j*∑f3(x)',
+                    label: {
+                        normal: {
+                            fontSize: 15,
+                            formatter: function(params, ticket, callback) {
+                                params.name = params.data.name;
+                                return params.name;
+                            },
+                            show: true
+                        }
+                    },
+                }, {
+                    source: 'p5',
+                    target: 'p6',
+                    islink: true,
+                    name: '预警规则',
+                    label: {
+                        normal: {
+                            fontSize: 15,
+                            formatter: function(params, ticket, callback) {
+                                params.name = params.data.name;
+                                return params.name;
+                            },
+                            show: true
+                        }
+                    },
+                }, {
+                    source: 'p6',
+                    target: 'p2',
+                    islink: true,
+                    name: '预警反馈机制',
+                    lineStyle: {
+                        normal: {
+                            curveness: 0.5,
+                            type: 'dashed',
+                        }
+                    },
+                    label: {
+                        normal: {
+                            fontSize: 15,
+
+                            formatter: function(params, ticket, callback) {
+                                params.name = params.data.name;
+                                return params.name;
+                            },
+                            show: true
+                        }
+                    },
+                }
+            ],
+            lineStyle: {
+                normal: {
+                    show: true,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0,
+                            color: 'red'
+                        }, {
+                            offset: 1,
+                            color: 'blue'
+                        }],
+                        globalCoord: false
+                    },
+
+                    // curveness: 0.2
+
+                },
+                emphasis: {
+                    color: 'red',
+                    width: 3,
+                    type: 'dashed',
+
+                }
+            },
+
+            tooltip: {
+                position: 'bottom',
+                backgroundColor: 'green',
+                textStyle: {
+                    fontSize: 18,
+                },
+            },
+
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
