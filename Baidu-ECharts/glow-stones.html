@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var scaleData = [{
+        'name': '工程建设',
+        'value': 10
+    },
+        {
+            'name': '产权交易',
+            'value': 10
+        },
+        {
+            'name': '土地交易',
+            'value': 10
+        },
+        {
+            'name': '其他交易',
+            'value': 10
+        },
+        {
+            'name': '土地交易',
+            'value': 10
+        },
+        {
+            'name': '其他交易',
+            'value': 10
+        },
+
+    ];
+    var rich = {
+        white: {
+            color: '#ddd',
+            align: 'center',
+            padding: [3, 0]
+        }
+    };
+    var placeHolderStyle = {
+        normal: {
+            label: {
+                show: false
+            },
+            labelLine: {
+                show: false
+            },
+            color: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0
+        }
+    };
+    var data = [];
+    var color=['#00ffff','#00cfff','#006ced','#ffe000','#ffa800','#ff5b00','#ff3000']
+    for (var i = 0; i < scaleData.length; i++) {
+        data.push({
+            value: scaleData[i].value,
+            name: scaleData[i].name,
+            itemStyle: {
+                normal: {
+                    borderWidth: 50,
+                    shadowBlur: 100,
+                    borderColor:color[i],
+                    shadowColor: color[i]
+                }
+            }
+        }, {
+            value: 50,
+            name: '',
+            itemStyle: placeHolderStyle
+        });
+    }
+    var seriesObj = [{
+        name: '',
+        type: 'pie',
+        clockWise: false,
+        radius: [100, 200],
+        hoverAnimation: false,
+        itemStyle: {
+            normal: {
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: '#ddd',
+                    formatter: function(params) {
+                        var percent = 0;
+                        var total = 0;
+                        for (var i = 0; i < scaleData.length; i++) {
+                            total += scaleData[i].value;
+                        }
+                        percent = ((params.value / total) * 100).toFixed(0);
+                        if(params.name !== '') {
+                            return params.name + '\n{white|' + '占比' + percent + '%}';
+                        }else {
+                            return '';
+                        }
+                    },
+                    rich: rich
+                },
+                labelLine: {
+                    length:30,
+                    length2:100,
+                    show: true,
+                    color:'#00ffff'
+                }
+            }
+        },
+        data: data
+    }];
+    option = {
+        backgroundColor: getColorFromQueryParam(),
+        tooltip: {
+            show: false
+        },
+        legend: {
+            show: false
+        },
+        toolbox: {
+            show: false
+        },
+        series: seriesObj
+    }
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
