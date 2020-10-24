@@ -16,6 +16,7 @@
     var option = null;
 
     values = [100, 91, 88, 92, 100, 94, 100, 100, 95, 90];
+    values2 = [45, 50, 62, 72, 68, 75, 54, 61, 81, 71];
     option = {
         backgroundColor: getColorFromQueryParam(),
         tooltip: {
@@ -92,7 +93,37 @@
                     position: 'top'
                 }
             }
-        }]
+        },{
+			type: 'line',
+			data: values2,
+			itemStyle: {
+				normal: {
+					color: '#5EB3F3'
+				}
+			},
+			areaStyle: {
+				normal: {
+					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+						offset: 0,
+						color: 'rgba(0, 136, 212, 0.8)'
+					}, {
+						offset: 1,
+						color: 'rgba(0, 136, 212, 0)'
+					}], false),
+					shadowColor: 'rgba(0, 0, 0, 0.1)',
+					shadowBlur: 10
+				}
+			},
+			symbolSize: 10,
+			label: {
+				normal: {
+					show: true, // 圆点上显示值
+					//distance: 10, // 向position方向偏移，默认5
+					color: '#999999',
+					position: 'top'
+				}
+			}
+		}]
     };
 
     if (option && typeof option === "object") {

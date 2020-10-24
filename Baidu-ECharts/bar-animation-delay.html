@@ -6,10 +6,6 @@
 <body style="height: 100%; margin: 0">
 <div id="container" style="height: 100%"></div>
 <script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
-<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
-<script type="text/javascript" src="dist/vendors/simplex.js"></script>
 <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     var dom = document.getElementById("container");
@@ -18,10 +14,14 @@
     var xAxisData = [];
     var data1 = [];
     var data2 = [];
+    var data3 = [];
+    var data4 = [];
     for (var i = 0; i < 100; i++) {
         xAxisData.push('类目' + i);
         data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
         data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5);
+		data3.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5.7);
+		data4.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 4.1);
     }
 
     option = {
@@ -31,7 +31,7 @@
             text: 'TITLE'
         },
         legend: {
-            data: ['bar', 'bar2'],
+            data: ['bar', 'another', 'third', 'fo'],
             align: 'left'
         },
         toolbox: {
@@ -58,17 +58,35 @@
             name: 'bar',
             type: 'bar',
             data: data1,
+			color: '#0000FF',
             animationDelay: function (idx) {
                 return idx * 10;
             }
         }, {
-            name: 'bar2',
+            name: 'another',
             type: 'bar',
             data: data2,
+			color: '#00FF00',
             animationDelay: function (idx) {
                 return idx * 10 + 100;
             }
-        }],
+        }, {
+			name: 'third',
+			type: 'bar',
+			data: data3,
+			color: '#FF0000',
+			animationDelay: function (idx) {
+				return idx * 10 + 100;
+			}
+		}, {
+			name: 'fo',
+			type: 'bar',
+			data: data4,
+			color: '#FFFF00',
+			animationDelay: function (idx) {
+				return idx * 10 + 100;
+			}
+		}],
         animationEasing: 'elasticOut',
         animationDelayUpdate: function (idx) {
             return idx * 5;
